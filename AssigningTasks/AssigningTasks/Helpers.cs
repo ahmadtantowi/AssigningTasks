@@ -22,8 +22,7 @@ namespace AssigningTasks
             {
                 if (!candidate.IsAssigned)
                 {
-                    candidate.DistanceToTarget =
-                        Math.Round(Distance(candidate.Location, target.Location) * 0.001, 2);
+                    candidate.DistanceToTarget = Math.Round(Distance(candidate.Location, target.Location));
                     _Candidates.Add(candidate);
                 }
             }
