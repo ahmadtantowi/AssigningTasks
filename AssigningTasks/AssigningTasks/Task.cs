@@ -26,9 +26,9 @@ namespace AssigningTasks
                      Load = 2,
                      Location = new Location()
                      {
-                         // Jl. Puyuh 15-55, Sadang Serang, Coblong, Kota Bandung, Jawa Barat 40133
-                         Latitude = -6.8967153,
-                         Longitude = 107.6218184,
+                         // Jl. Supratman No.49, Cihapit, Bandung Wetan, Kota Bandung, Jawa Barat 40114
+                         Latitude = -6.9033567,
+                         Longitude = 107.6253853,
                      }
                  },
                  new Candidate()
@@ -37,9 +37,9 @@ namespace AssigningTasks
                      Load = 2,
                      Location = new Location()
                      {
-                         // Jl. Diponegoro No.34, RW.12, Citarum, Bandung Wetan, Kota Bandung, Jawa Barat 40115
-                         Latitude = -6.9013799,
-                         Longitude = 107.6212204,
+                         // Jl. Sadang Saip No.22, Sadang Serang, Coblong, Kota Bandung, Jawa Barat 40133
+                         Latitude = -6.8940733,
+                         Longitude = 107.6225947,
                      }
                  },
                  new Candidate()
@@ -48,9 +48,9 @@ namespace AssigningTasks
                      Load = 2,
                      Location = new Location()
                      {
-                         // Gg. Tilil II 28, Sukaluyu, Cibeunying Kaler, Kota Bandung, Jawa Barat
-                         Latitude = -6.8976273,
-                         Longitude = 107.6237703,
+                         // Jl. Surapati No.129 H, Sukaluyu, Cibeunying Kaler, Kota Bandung, Jawa Barat 40123
+                         Latitude = -6.8991873,
+                         Longitude = 107.6254247,
                      }
                  },
                  new Candidate()
@@ -59,9 +59,9 @@ namespace AssigningTasks
                      Load = 2,
                      Location = new Location()
                      {
-                         // Jl. Melania 1, Cihaur Geulis, Cibeunying Kaler, Kota Bandung, Jawa Barat 40122
-                         Latitude = -6.9009291,
-                         Longitude = 107.6224671,
+                         // Jl. Gagak No.43, Sadang Serang, Coblong, Kota Bandung, Jawa Barat 40133
+                         Latitude = -6.8952063,
+                         Longitude = 107.6244494,
                      }
                  },
             };
