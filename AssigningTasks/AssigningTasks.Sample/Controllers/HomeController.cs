@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,6 +12,12 @@ namespace AssigningTasks.Sample.Controllers
     {
         public IActionResult Index()
         {
+            IAssignTask nn = new NearestNeighborAlgorithm();
+            var nnResult = nn.AssignTo(Mock.Candidates, Mock.Targets[0]);
+
+            IAssignTask rr = new RoundRobinAlgorithm();
+            var rrResult = rr.AssignTo(Mock.Candidates, Mock.Targets[1], 3);
+
             return View();
         }
 
