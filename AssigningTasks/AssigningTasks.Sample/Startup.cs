@@ -63,7 +63,7 @@ namespace AssigningTasks.Sample
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Assignee}/{action=Simulation}/{id?}");
             });
         }
     }

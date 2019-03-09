@@ -17,5 +17,9 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Business\" />
+    <Folder Include="Views\Assignee\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Assignee\Simulation.html" />
   </ItemGroup>
 </Project>
