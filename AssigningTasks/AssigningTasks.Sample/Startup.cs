@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AssigningTasks.Sample.Business;
 using AssigningTasks.Sample.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +36,9 @@ namespace AssigningTasks.Sample
 
             services.AddDbContext<SampleDataContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<IDataBusiness, DataBusiness>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
