@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AssigningTasks
 {
-    public static class Task
+    public static class Mock
     {
         public static IList<Candidate> Candidates =>
             new List<Candidate>()
@@ -12,7 +12,7 @@ namespace AssigningTasks
                  new Candidate()
                  {
                      Id = "C-01",
-                     Load = 2,
+                     Load = 4,
                      Location = new Location()
                      {
                          // Jl. Tikukur No.4A, Sadang Serang, Coblong, Kota Bandung, Jawa Barat 40133
@@ -23,7 +23,7 @@ namespace AssigningTasks
                  new Candidate()
                  {
                      Id = "C-02",
-                     Load = 2,
+                     Load = 1,
                      Location = new Location()
                      {
                          // Jl. Supratman No.49, Cihapit, Bandung Wetan, Kota Bandung, Jawa Barat 40114
@@ -34,7 +34,7 @@ namespace AssigningTasks
                  new Candidate()
                  {
                      Id = "C-03",
-                     Load = 2,
+                     Load = 3,
                      Location = new Location()
                      {
                          // Jl. Sadang Saip No.22, Sadang Serang, Coblong, Kota Bandung, Jawa Barat 40133
@@ -45,7 +45,7 @@ namespace AssigningTasks
                  new Candidate()
                  {
                      Id = "C-04",
-                     Load = 2,
+                     Load = 6,
                      Location = new Location()
                      {
                          // Jl. Surapati No.129 H, Sukaluyu, Cibeunying Kaler, Kota Bandung, Jawa Barat 40123
@@ -79,30 +79,18 @@ namespace AssigningTasks
                         Latitude = -6.8986037,
                         Longitude = 107.6225108,
                     }
-                }
+                },
+                new Target()
+                {
+                    Id = "T-02",
+                    RequestTime = new DateTime(2019, 03, 29, 10, 30, 0),
+                    Location = new Location()
+                    {
+                        // Jl. Sido Luhur No.14, Sukaluyu, Cibeunying Kaler, Kota Bandung, Jawa Barat 40123
+                        Latitude = -6.8948093,
+                        Longitude = 107.6337169,
+                    }
+                },
             };
-    }
-
-    public class NearestNeighbor : IAssignTask
-    {
-        private Helpers _Helpers;
-
-        public Candidate AssignTo(IList<Candidate> candidates, Target target)
-        {
-            _Helpers = new Helpers();
-
-            var unscheduledCandidates = _Helpers.SortByUnassigned(Task.Candidates, Task.Targets[0]);
-            var nearestToTarget = unscheduledCandidates.Min(x => x.DistanceToTarget);
-
-            return unscheduledCandidates.FirstOrDefault(x => x.DistanceToTarget == nearestToTarget);
-        }
-    }
-
-    public class RoundRobin : IAssignTask
-    {
-        public Candidate AssignTo(IList<Candidate> candidates, Target target)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

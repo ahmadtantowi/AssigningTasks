@@ -5,6 +5,6 @@ namespace AssigningTasks
 {
     public interface IAssignTask
     {
-        Candidate AssignTo(IList<Candidate> candidates, Target target);
+        Candidate AssignTo(IList<Candidate> candidates, Target target, int maxLoad = 0);
     }
 }
