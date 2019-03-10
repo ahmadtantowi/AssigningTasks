@@ -19,6 +19,8 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+
+    @RenderSection("HeadSection", false)
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -51,6 +53,8 @@
             <p>&copy; 2019 - @ViewData["AppName"]</p>
         </footer>
     </div>
+
+    @RenderSection("MapSection", false)
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

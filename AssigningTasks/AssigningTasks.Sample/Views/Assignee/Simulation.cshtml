@@ -3,4 +3,65 @@
     ViewData["Title"] = "Simulasi";
 }
 
+@section HeadSection {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""></script>
+}
+
 <h1>@ViewData["Title"]</h1>
+
+<div id="map" style="height: 300px;"></div>
+<hr />
+
+<div class="row" hidden>
+    <div class="col-md-3">
+        Latitude: <input class="form-control" id="inputLat" placeholder="Latitude"/> 
+        Longitude: <input class="form-control" id="inputLng" placeholder="Longitude"/>
+    </div>
+</div>
+
+@section MapSection {
+<script>
+    var myMap = L.map('map', {scrollWheelZoom: false})
+        .setView([-6.8986037, 107.6225108], 10);
+    var markerGroup = L.layerGroup()
+        .addTo(myMap);
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        })
+        .addTo(myMap);
+    updateCoordinate(myMap.getCenter());
+
+    myMap.on('moveend', function(e) {
+        var coordinate = e.target.getCenter();
+        updateCoordinate(coordinate);
+        console.log("Moved => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
+    });
+
+    myMap.on('click', function(e) {
+        var coordinate = myMap.mouseEventToLatLng(e.originalEvent);
+        updateCoordinate(coordinate);
+        console.log("Clicked => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
+    });
+
+    function updateCoordinate(coordinate) {
+        document.getElementById('inputLat').value = coordinate.lat;
+        document.getElementById('inputLng').value = coordinate.lng;
+    }
+
+    function showMarker(coordinate) {
+        var marker = L.marker([coordinate.lat, coordinate.lng])
+            .addTo(markerGroup);
+    }
+
+    function hideMarkers() {
+        markerGroup.clearLayers();
+    }
+</script>
+}
+
