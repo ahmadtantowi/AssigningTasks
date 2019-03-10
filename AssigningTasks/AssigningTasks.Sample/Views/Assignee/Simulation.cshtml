@@ -1,4 +1,6 @@
-﻿@{
+﻿@model AssigningTasks.Sample.ViewModels.SimulationViewModel
+
+@{
     Layout = "_BaseLayout";
     ViewData["Title"] = "Simulasi";
 }
@@ -22,6 +24,95 @@
         Latitude: <input class="form-control" id="inputLat" placeholder="Latitude"/> 
         Longitude: <input class="form-control" id="inputLng" placeholder="Longitude"/>
     </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <label class="control-label">Nearest Neighbor</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id Pengguna</th>
+                    <th>Id Karyawan</th>
+                    <th>Jarak (m)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@ViewBag.NnRequest.Id</td>
+                    <td>@ViewBag.NnResult.Id</td>
+                    <td>@ViewBag.NnResult.DistanceToTarget</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <label class="control-label">Round Robin</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id Pengguna</th>
+                    <th>Id Karyawan</th>
+                    <th>Jarak (m)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@ViewBag.RrRequest.Id</td>
+                    <td>@ViewBag.RrResult.Id</td>
+                    <td>@ViewBag.RrResult.DistanceToTarget</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <label class="control-label">Pengguna</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.UserTable)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Location.Latitude</td>
+                        <td>@user.Location.Longitude</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <label class="control-label">Karyawan</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Jarak</th>
+                    <th>Beban</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model.EmployeeTable)
+                {
+                    <tr>
+                        <td>@employee.Id</td>
+                        <td>@employee.DistanceToTarget</td>
+                        <td>@employee.Load</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 @section MapSection {
@@ -46,6 +137,7 @@
     myMap.on('click', function(e) {
         var coordinate = myMap.mouseEventToLatLng(e.originalEvent);
         updateCoordinate(coordinate);
+        showMarker(coordinate);
         console.log("Clicked => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
     });
 
@@ -56,7 +148,9 @@
 
     function showMarker(coordinate) {
         var marker = L.marker([coordinate.lat, coordinate.lng])
-            .addTo(markerGroup);
+            .bindPopup("Latitude: " + coordinate.lat + "<br/>Longitude: " + coordinate.lng)
+            .addTo(markerGroup)
+            .openPopup();
     }
 
     function hideMarkers() {

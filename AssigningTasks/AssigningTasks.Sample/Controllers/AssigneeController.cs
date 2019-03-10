@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AssigningTasks.Sample.Models;
 using AssigningTasks.Sample.Business;
+using AssigningTasks.Sample.ViewModels;
 
 namespace AssigningTasks.Sample.Controllers
 {
@@ -20,7 +21,46 @@ namespace AssigningTasks.Sample.Controllers
 
         public IActionResult Simulation()
         {
-            return View();
+            var candidates = _dataBusiness.GetCandidates()
+                .Select(c => new Candidate
+                {
+                    Id = c.CandidateId,
+                    IsAssigned = c.IsAssigned,
+                    Load = c.Load,
+                    Location = new Location
+                    {
+                        Latitude = c.Latitude,
+                        Longitude = c.Longitude
+                    }
+                })
+                .ToList();
+            var targets = _dataBusiness.GetTargets()
+                .Select(t => new Target
+                {
+                    Id = t.TargetId,
+                    Location = new Location
+                    {
+                        Latitude = t.Latitude,
+                        Longitude = t.Longitude
+                    }
+                })
+                .ToList();
+
+            var simulationVM = new SimulationViewModel
+            {
+                EmployeeTable = candidates,
+                UserTable = targets
+            };
+
+            IAssignTask nn = new NearestNeighborAlgorithm();
+            ViewBag.NnRequest = targets[0];
+            ViewBag.NnResult = nn.AssignTo(candidates, targets[0]);
+
+            IAssignTask rr = new RoundRobinAlgorithm();
+            ViewBag.RrRequest = targets[1];
+            ViewBag.RrResult = rr.AssignTo(candidates, targets[1], maxLoad: 3);
+
+            return View(simulationVM);
         }
 
         public IActionResult Candidate()
