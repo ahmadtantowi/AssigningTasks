@@ -12,7 +12,7 @@ namespace AssigningTasks
             _helpers = new Helpers();
         }
 
-        public Candidate AssignTo(IList<Candidate> candidates, Target target, int maxLoad = 0)
+        public (IList<Candidate>, Candidate) AssignTo(IList<Candidate> candidates, Target target, int maxLoad = 0)
         {
             var candidatesMinLoad = new List<Candidate>();
 
@@ -35,7 +35,7 @@ namespace AssigningTasks
                 }
             }
 
-            return candidateToAssign;
+            return (unscheduledCandidates, candidateToAssign);
         }
     }
 }

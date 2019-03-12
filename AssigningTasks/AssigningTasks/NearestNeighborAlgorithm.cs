@@ -12,7 +12,7 @@ namespace AssigningTasks
             _helpers = new Helpers();
         }
 
-        public Candidate AssignTo(IList<Candidate> candidates, Target target, int maxLoad = 0)
+        public (IList<Candidate>, Candidate) AssignTo(IList<Candidate> candidates, Target target, int maxLoad = 0)
         {
             var unscheduledCandidates = _helpers.SortByUnassigned(candidates, target);
             var nearestCandidate = unscheduledCandidates[0];
@@ -25,7 +25,7 @@ namespace AssigningTasks
                 }
             }
 
-            return nearestCandidate;
+            return (unscheduledCandidates, nearestCandidate);
         }
     }
 }
