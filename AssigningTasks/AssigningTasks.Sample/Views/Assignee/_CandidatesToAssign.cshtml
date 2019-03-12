@@ -1,0 +1,21 @@
+﻿@model List<AssigningTasks.Candidate>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Jarak</th>
+            <th>Beban</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.Id</td>
+                <td>@employee.DistanceToTarget</td>
+                <td>@employee.Load</td>
+            </tr>
+        }
+    </tbody>
+</table>

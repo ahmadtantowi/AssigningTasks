@@ -21,12 +21,40 @@
 
 <div class="row" hidden>
     <div class="col-md-3">
-        Latitude: <input class="form-control" id="inputLat" placeholder="Latitude"/> 
-        Longitude: <input class="form-control" id="inputLng" placeholder="Longitude"/>
+        Latitude: <input class="form-control" id="inputLat" placeholder="Latitude" />
+        Longitude: <input class="form-control" id="inputLng" placeholder="Longitude" />
     </div>
-
 </div>
+
 <div class="row">
+    <div class="col-md-12">
+        <h4><label class="control-label">Pengaturan:</label></h4>
+    </div>
+    <div class="form-group row col-md-3">
+        <label class="col-sm-4 col-form-label" for="algorithmSelected">Algoritma: </label>
+        <select class="custom-select mr-sm-2" id="algorithmSelected">
+            <option value="1" selected>Nearest Neighbor</option>
+            <option value="2">Round Robin</option>
+        </select>
+    </div>
+    <div class="form-group row col-md-3" id="maxLoadSelector">
+        <label class="col-sm-7 col-form-label" for="maxLoadSelected">Beban maksimal: </label>
+        <select class="custom-select mr-sm-2" id="maxLoadSelected">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+</div>
+<hr />
+@*<div class="row">
     <div class="col-md-6">
         <label class="control-label">Nearest Neighbor</label>
         <table class="table">
@@ -66,16 +94,17 @@
         </table>
     </div>
 </div>
-<hr />
+<hr />*@
 <div class="row">
     <div class="col-md-6">
-        <label class="control-label">Pengguna</label>
+        <label class="control-label">Pengguna:</label>
         <table class="table">
             <thead>
                 <tr>
                     <th>Id</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -85,38 +114,27 @@
                         <td>@user.Id</td>
                         <td>@user.Location.Latitude</td>
                         <td>@user.Location.Longitude</td>
+                        <td>
+                            <a onclick="userRequest('@user.Id')">Minta jasa</a>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
     <div class="col-md-6">
-        <label class="control-label">Karyawan</label>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Jarak</th>
-                    <th>Beban</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var employee in Model.EmployeeTable)
-                {
-                    <tr>
-                        <td>@employee.Id</td>
-                        <td>@employee.DistanceToTarget</td>
-                        <td>@employee.Load</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <label class="control-label">Karyawan yang akan ditugaskan:</label>
+        <div id="candidateToAssign">
+            @Html.Partial("_CandidatesToAssign", Model.EmployeeTable)
+        </div>
     </div>
-
+    <hr/>
+    @*Add transaction table HERE!*@
 </div>
 
+
 @section MapSection {
-<script>
+    <script>
     var myMap = L.map('map', {scrollWheelZoom: false})
         .setView([-6.8986037, 107.6225108], 10);
     var markerGroup = L.layerGroup()
@@ -141,6 +159,11 @@
         console.log("Clicked => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
     });
 
+    document.getElementById('algorithmSelected').onchange = function(e) {
+        maxLoadSelector.style.visibility = e.target.value == 1 ? 'visible' : 'hidden';
+        maxLoadSelected.disabled = e.target.value == 2;
+    }
+
     function updateCoordinate(coordinate) {
         document.getElementById('inputLat').value = coordinate.lat;
         document.getElementById('inputLng').value = coordinate.lng;
@@ -156,6 +179,22 @@
     function hideMarkers() {
         markerGroup.clearLayers();
     }
-</script>
+
+    function userRequest(id) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("RequestCandidate")",
+            data: {
+                id: id,
+                algo: document.getElementById('algorithmSelected').value,
+                maxLoad: document.getElementById('maxLoadSelected').value,
+            },
+            success: function(data) {
+                $('#candidateToAssign').html(data);
+                console.log(data);
+            }
+        });
+    }
+    </script>
 }
 

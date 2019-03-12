@@ -19,6 +19,7 @@
     <Folder Include="Business\" />
     <Folder Include="Views\Assignee\" />
     <Folder Include="ViewModels\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Assignee\Simulation.html" />
