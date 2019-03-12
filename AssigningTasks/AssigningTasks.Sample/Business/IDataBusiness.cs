@@ -7,7 +7,11 @@ namespace AssigningTasks.Sample.Business
 {
     public interface IDataBusiness
     {
+        Data.Target GetTarget(string id);
+
         List<Data.Target> GetTargets();
+
+        Data.Candidate GetCandidate(string id);
 
         List<Data.Candidate> GetCandidates();
 

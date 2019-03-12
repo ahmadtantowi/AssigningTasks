@@ -16,12 +16,42 @@ namespace AssigningTasks.Sample.Business
             _dbContext = dbContext;
         }
 
+        public Data.Candidate GetCandidate(string id)
+        {
+            try
+            {
+                return (from candidate in _dbContext.Candidates
+                        where candidate.CandidateId.Equals(id)
+                        select candidate)
+                        .FirstOrDefault();
+            }
+            catch (Exception exc)
+            {
+                throw exc;
+            }
+        }
+
         public List<Data.Candidate> GetCandidates()
         {
             try
             {
                 return (from candidate in _dbContext.Candidates
                         select candidate).ToList();
+            }
+            catch (Exception exc)
+            {
+                throw exc;
+            }
+        }
+
+        public Data.Target GetTarget(string id)
+        {
+            try
+            {
+                return (from target in _dbContext.Targets
+                        where target.TargetId.Equals(id)
+                        select target)
+                        .FirstOrDefault();
             }
             catch (Exception exc)
             {
