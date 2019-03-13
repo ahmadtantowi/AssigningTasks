@@ -1,0 +1,25 @@
+﻿@model List<AssigningTasks.Sample.ViewModels.TransactionHistoryViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m[0].Id)</th>
+            <th>@Html.DisplayNameFor(m => m[0].TargetName)</th>
+            <th>@Html.DisplayNameFor(m => m[0].CandidateName)</th>
+            <th>@Html.DisplayNameFor(m => m[0].Distance)</th>
+            <th>@Html.DisplayNameFor(m => m[0].RequestTime)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.Id</td>
+                <td>@transaction.TargetName</td>
+                <td>@transaction.CandidateName</td>
+                <td>@transaction.Distance</td>
+                <td>@transaction.RequestTime</td>
+            </tr>
+        }
+    </tbody>
+</table>

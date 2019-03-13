@@ -10,6 +10,10 @@ namespace AssigningTasks.Sample.ViewModels
 
         public List<Candidate> EmployeeTable { get; set; }
 
+        public List<TransactionHistoryViewModel> TransactionHistory { get; set; }
+
+        public TransactionHistoryViewModel SelectedCandidate { get; set; }
+
         //public List<Data.Target> Users { get; set; }
 
         //public List<Data.Candidate> Candidates { get; set; }

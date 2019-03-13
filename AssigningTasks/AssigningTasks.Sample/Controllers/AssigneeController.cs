@@ -48,7 +48,9 @@ namespace AssigningTasks.Sample.Controllers
             return View(new SimulationViewModel()
             {
                 UserTable = _dataBusiness.GetTargets().ToLibTargets(),
-                EmployeeTable = new List<Candidate>()
+                EmployeeTable = new List<Candidate>(),
+                TransactionHistory = _dataBusiness.GetTransactionHistories(),
+                SelectedCandidate = new TransactionHistoryViewModel()
             });
         }
 
@@ -64,7 +66,6 @@ namespace AssigningTasks.Sample.Controllers
             return View(targets);
         }
 
-        [HttpPost]
         public IActionResult RequestCandidate(int algo, int maxLoad, string id)
         {
             IAssignTask assignTask = default(IAssignTask);
@@ -80,12 +81,22 @@ namespace AssigningTasks.Sample.Controllers
                 assignTask = new RoundRobinAlgorithm();
             }
 
-            (IList<Candidate>, Candidate) assigned = assignTask.AssignTo(_dataBusiness.GetCandidates().ToLibCandidates(), currentUser);
+            (IList<Candidate>, Candidate) assigned = assignTask.AssignTo(_dataBusiness.GetCandidates().ToLibCandidates(), currentUser, maxLoad);
             DateTime assignedTime = DateTime.Now;
 
-            ModifyTable(assigned.Item2, currentUser, requestTime, assignedTime);
+            _ = ModifyTable(assigned.Item2, currentUser, requestTime, assignedTime);
 
             return PartialView("_CandidatesToAssign", assigned.Item1);
+        }
+
+        public IActionResult SelectedCandidate()
+        {
+            var ata =  PartialView("_SelectedCandidate", _dataBusiness.GetTransactionHistories().FirstOrDefault());return ata;
+        }
+
+        public IActionResult TransactionHistory()
+        {
+            return PartialView("_TransactionHistory", _dataBusiness.GetTransactionHistories());
         }
 
         private async Task ModifyTable(Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime)
@@ -98,8 +109,18 @@ namespace AssigningTasks.Sample.Controllers
             Data.Target modTarget = _dataBusiness.GetTarget(target.Id);
             modTarget.LastRequest = requestTime;
 
+            Data.Transaction modTransaction = new Data.Transaction
+            {
+                From = modTarget,
+                To = modCandidate,
+                RequestAt = requestTime,
+                AssigneeAt = assignedTime,
+                Distance = candidate.DistanceToTarget,
+            };
+
             await _dataBusiness.ModifyCandidate(modCandidate);
             await _dataBusiness.ModifyTarget(modTarget);
+            await _dataBusiness.ModifyTransaction(modTransaction);
         }
     }
 }

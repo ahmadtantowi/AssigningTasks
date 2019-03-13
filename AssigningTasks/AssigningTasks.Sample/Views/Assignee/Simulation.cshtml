@@ -16,6 +16,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<div id="loader"></div>
 <div id="map" style="height: 300px;"></div>
 <hr />
 
@@ -128,13 +129,28 @@
             @Html.Partial("_CandidatesToAssign", Model.EmployeeTable)
         </div>
     </div>
-    <hr/>
-    @*Add transaction table HERE!*@
+</div>
+<hr/>
+<div class="row">
+    <div class="col-md-12">
+        <label class="control-label">Karyawan terpilih:</label>
+        <div id="selectedCandidate">
+            @Html.Partial("_SelectedCandidate", Model.SelectedCandidate)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label class="control-label">Riwayat Penugasan:</label>
+        <div id="transactionHistory">
+            @Html.Partial("_TransactionHistory", Model.TransactionHistory)
+        </div>
+    </div>
 </div>
 
 
 @section MapSection {
-    <script>
+<script>
     var myMap = L.map('map', {scrollWheelZoom: false})
         .setView([-6.8986037, 107.6225108], 10);
     var markerGroup = L.layerGroup()
@@ -145,6 +161,9 @@
         })
         .addTo(myMap);
     updateCoordinate(myMap.getCenter());
+    maxLoadSelector.style.visibility = document.getElementById('algorithmSelected').value == 2 ? 'visible' : 'hidden';
+    document.getElementById('selectedCandidate').style.visibility = 'hidden';
+    loaded();
 
     myMap.on('moveend', function(e) {
         var coordinate = e.target.getCenter();
@@ -159,9 +178,17 @@
         console.log("Clicked => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
     });
 
+    function loading() {
+        document.getElementById("loader").style.display = "block";
+    }
+
+    function loaded() {
+        document.getElementById("loader").style.display = "none";
+    }
+
     document.getElementById('algorithmSelected').onchange = function(e) {
-        maxLoadSelector.style.visibility = e.target.value == 1 ? 'visible' : 'hidden';
-        maxLoadSelected.disabled = e.target.value == 2;
+        maxLoadSelector.style.visibility = e.target.value == 2 ? 'visible' : 'hidden';
+        @*maxLoadSelected.disabled = e.target.value == 2;*@
     }
 
     function updateCoordinate(coordinate) {
@@ -181,8 +208,9 @@
     }
 
     function userRequest(id) {
+        loading();
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "@Url.Action("RequestCandidate")",
             data: {
                 id: id,
@@ -191,10 +219,45 @@
             },
             success: function(data) {
                 $('#candidateToAssign').html(data);
-                console.log(data);
+                @*document.getElementById('selectedCandidate').style.visibility = 'visible';*@
+                console.log("RequestCandidate - Sukses bos!")
+
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("SelectedCandidate")",
+                    success: function(data) {
+                        $('#selectedCandidate').html(data);
+                        document.getElementById('selectedCandidate').style.visibility = 'visible';
+                        console.log("SelectedCandidate - Sukses bos!");
+
+                        $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("TransactionHistory")",
+                            success: function(data) {
+                                $('#transactionHistory').html(data);
+                                console.log("TransactionHistory - Sukses bos!")
+                            },
+                            error: function(exc) {
+                                console.log("TransactionHistory - Error bos!");
+                                console.log(exc);
+                            }
+                        });
+                    },
+                    error: function(exc) {
+                        console.log("SelectedCandidate - Error bos!");
+                        console.log(exc);
+                    }
+                });
+            },
+            error: function(exc) {
+                console.log("RequestCandidate - Error bos! " + exc)
+            },
+            complete: function() {
+                loaded();
+                console.log("RequestCandidate - Beres bos!")
             }
         });
     }
-    </script>
-}
+</script>
+    }
 
