@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AssigningTasks.Sample.ViewModels;
 using Data = AssigningTasks.Sample.Data;
 
 namespace AssigningTasks.Sample.Business
@@ -16,6 +17,8 @@ namespace AssigningTasks.Sample.Business
         List<Data.Candidate> GetCandidates();
 
         List<Data.Transaction> GetTransactions();
+
+        List<TransactionHistoryViewModel> GetTransactionHistories();
 
         Task<Data.Target> ModifyTarget(Data.Target target);
 
