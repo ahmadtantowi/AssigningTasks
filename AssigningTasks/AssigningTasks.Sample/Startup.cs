@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AssigningTasks.Sample.Business;
 using AssigningTasks.Sample.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +38,19 @@ namespace AssigningTasks.Sample
             services.AddDbContext<SampleDataContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie((opt) =>
+                {
+                    opt.AccessDeniedPath = "/Account/AccessDenied";
+                    opt.LoginPath = "/Account/Login";
+                    opt.LogoutPath = "/Account/Logout";
+                });
+
+            services.AddSession((opt) =>
+            {
+                opt.IdleTimeout = TimeSpan.FromMinutes(1);
+            });
+
             services.AddTransient<IDataBusiness, DataBusiness>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -55,8 +69,10 @@ namespace AssigningTasks.Sample
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseSession();
             app.UseStaticFiles();
+            app.UseHttpsRedirection();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

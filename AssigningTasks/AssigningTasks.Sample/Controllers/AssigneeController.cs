@@ -8,9 +8,11 @@ using AssigningTasks.Sample.Models;
 using AssigningTasks.Sample.Business;
 using AssigningTasks.Sample.ViewModels;
 using AssigningTasks.Sample.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AssigningTasks.Sample.Controllers
 {
+    [Authorize]
     public class AssigneeController : Controller
     {
         private readonly IDataBusiness _dataBusiness;

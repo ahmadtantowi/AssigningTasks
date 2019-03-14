@@ -20,8 +20,15 @@
     <Folder Include="Views\Assignee\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Views\Account\" />
+    <Folder Include="wwwroot\lib\plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\Assignee\Simulation.html" />
+    <Content Remove="Views\Views\Login.cshtml" />
+    <Content Remove="wwwroot\lib\plugins\bootstrap\css\bootstrap.css.map" />
+    <Content Remove="wwwroot\css\layout.css" />
+    <Content Remove="wwwroot\css\login.css" />
   </ItemGroup>
 </Project>
