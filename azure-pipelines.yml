@@ -13,4 +13,4 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build AssigningTasks/AssigningTasks/AssigningTasks.Sample/AssigningTasks.Sample.csproj --configuration $(buildConfiguration)
+- script: dotnet build AssigningTasks/AssigningTasks.Sample/AssigningTasks.Sample.csproj --configuration $(buildConfiguration)
