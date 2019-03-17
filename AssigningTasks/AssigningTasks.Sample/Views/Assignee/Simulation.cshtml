@@ -97,7 +97,7 @@
 </div>
 <hr />*@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6" id="targets">
         <label class="control-label">Pengguna:</label>
         <table class="table">
             <thead>
@@ -160,14 +160,11 @@
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         })
         .addTo(myMap);
-    updateCoordinate(myMap.getCenter());
-    maxLoadSelector.style.visibility = document.getElementById('algorithmSelected').value == 2 ? 'visible' : 'hidden';
-    document.getElementById('selectedCandidate').style.visibility = 'hidden';
-    loaded();
 
     myMap.on('moveend', function(e) {
         var coordinate = e.target.getCenter();
         updateCoordinate(coordinate);
+        hideMarkers();
         console.log("Moved => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
     });
 
@@ -200,11 +197,59 @@
         var marker = L.marker([coordinate.lat, coordinate.lng])
             .bindPopup("Latitude: " + coordinate.lat + "<br/>Longitude: " + coordinate.lng)
             .addTo(markerGroup)
-            .openPopup();
+            @*.openPopup();*@
+    }
+
+    function showMarkers(data) {
+        if (data) {
+            for (var i in data) {
+                var latlng = L.latLng({ lat: data[i].Latitude , lng: data[i].Longitude });
+                showMarker(latlng);
+            }
+        }
     }
 
     function hideMarkers() {
         markerGroup.clearLayers();
+    }
+
+    function jsonCandidateToAssign() {
+        var keys=[], arrayObj=[];
+        $("#transactionHistory table thead tr th").each(function(){
+            keys.push($(this).html());
+        });
+
+        $("#transactionHistory table tbody tr").each(function(){
+            var obj={}, i=0;
+            $(this).children("td").each(function(){
+                obj[keys[i]]=$(this).html();
+                i++;
+            })
+            arrayObj.push(obj);
+        });
+
+        console.log("CandidateToAssign JSON:");
+        console.log(arrayObj);
+    }
+
+    function jsonTargets() {
+        var keys=[], arrayObj=[];
+        $("#targets table thead tr th").each(function(){
+            keys.push($(this).html());
+        });
+
+        $("#targets table tbody tr").each(function(){
+            var obj={}, i=0;
+            $(this).children("td").each(function(){
+                obj[keys[i]]=$(this).html();
+                i++;
+            })
+            arrayObj.push(obj);
+        });
+
+        showMarkers(arrayObj);
+        console.log("Targets JSON:");
+        console.log(arrayObj);
     }
 
     function userRequest(id) {
@@ -258,6 +303,16 @@
             }
         });
     }
+
+    $(document).ready(function() {
+        updateCoordinate(myMap.getCenter());
+        maxLoadSelector.style.visibility = document.getElementById('algorithmSelected').value == 2 ? 'visible' : 'hidden';
+        document.getElementById('selectedCandidate').style.visibility = 'hidden';
+        loaded();
+
+        jsonTargets();
+        jsonCandidateToAssign();
+    })
 </script>
-    }
+}
 
