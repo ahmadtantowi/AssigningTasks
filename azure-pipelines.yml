@@ -18,4 +18,3 @@ steps:
   inputs:
     #command: 'build' 
     #projects: 'AssigningTasks/AssigningTasks/AssigningTasks.Sample/AssigningTasks.Sample.csproj'
-  displayName: 'dotnet build $(buildConfiguration)'
