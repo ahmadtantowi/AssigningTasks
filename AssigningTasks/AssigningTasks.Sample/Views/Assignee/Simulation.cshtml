@@ -152,7 +152,7 @@
 @section MapSection {
 <script>
     var myMap = L.map('map', {scrollWheelZoom: false})
-        .setView([-6.8986037, 107.6225108], 10);
+        .setView([-6.8986037, 107.6225108], 13);
     var markerGroup = L.layerGroup()
         .addTo(myMap);
 
@@ -164,14 +164,12 @@
     myMap.on('moveend', function(e) {
         var coordinate = e.target.getCenter();
         updateCoordinate(coordinate);
-        hideMarkers();
         console.log("Moved => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
     });
 
     myMap.on('click', function(e) {
         var coordinate = myMap.mouseEventToLatLng(e.originalEvent);
         updateCoordinate(coordinate);
-        showMarker(coordinate);
         console.log("Clicked => lat: " + coordinate.lat + ", lng: " + coordinate.lng);
     });
 
@@ -193,33 +191,60 @@
         document.getElementById('inputLng').value = coordinate.lng;
     }
 
-    function showMarker(coordinate) {
-        var marker = L.marker([coordinate.lat, coordinate.lng])
-            .bindPopup("Latitude: " + coordinate.lat + "<br/>Longitude: " + coordinate.lng)
+    @*orange = users, yellow = user request, green = candidates, red = selectedCandidate*@
+    function showMarker(coordinate, id, distance, color) {
+        var marker = L.marker([coordinate.lat, coordinate.lng], {icon: getMarker(color)})
+            .bindPopup(getPopup(coordinate.lat, coordinate.lng, id, distance))
             .addTo(markerGroup)
             @*.openPopup();*@
+
+        function getPopup(lat, lng, id, distance) {
+            var popup = "";
+            if (id) {
+                popup = popup + "Id: " + id + "<br/>";
+            }
+            if (distance) {
+                popup = popup + "Jarak: " + distance + "m <br/>"
+            }
+            return popup + "Latitude: " + lat + "<br/>Longitude: " + lng;
+        }
     }
 
-    function showMarkers(data) {
+    function showMarkers(data, color = "orange") {
         if (data) {
             for (var i in data) {
                 var latlng = L.latLng({ lat: data[i].Latitude , lng: data[i].Longitude });
-                showMarker(latlng);
+                showMarker(latlng, data[i].Id, data[i].Distance, color);
             }
         }
+    }
+
+    function getMarker(color) {
+        return new L.Icon({
+            iconUrl: '/images/marker-icon-2x-' + color + '.png',
+            shadowUrl: '/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
     }
 
     function hideMarkers() {
         markerGroup.clearLayers();
     }
 
+    function jsonSelectedTargetAndCandidate() {
+        
+    }
+
     function jsonCandidateToAssign() {
         var keys=[], arrayObj=[];
-        $("#transactionHistory table thead tr th").each(function(){
+        $("#candidateToAssign table thead tr th").each(function(){
             keys.push($(this).html());
         });
 
-        $("#transactionHistory table tbody tr").each(function(){
+        $("#candidateToAssign table tbody tr").each(function(){
             var obj={}, i=0;
             $(this).children("td").each(function(){
                 obj[keys[i]]=$(this).html();
@@ -228,6 +253,7 @@
             arrayObj.push(obj);
         });
 
+        showMarkers(arrayObj, "green");
         console.log("CandidateToAssign JSON:");
         console.log(arrayObj);
     }
@@ -247,7 +273,7 @@
             arrayObj.push(obj);
         });
 
-        showMarkers(arrayObj);
+        showMarkers(arrayObj, "orange");
         console.log("Targets JSON:");
         console.log(arrayObj);
     }
@@ -266,6 +292,7 @@
                 $('#candidateToAssign').html(data);
                 @*document.getElementById('selectedCandidate').style.visibility = 'visible';*@
                 console.log("RequestCandidate - Sukses bos!")
+                jsonCandidateToAssign();
 
                 $.ajax({
                     type: "GET",

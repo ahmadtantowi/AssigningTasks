@@ -30,5 +30,25 @@
     <Content Remove="wwwroot\lib\plugins\bootstrap\css\bootstrap.css.map" />
     <Content Remove="wwwroot\css\layout.css" />
     <Content Remove="wwwroot\css\login.css" />
+    <Content Remove="wwwroot\images\marker-icon-2x-black.png" />
+    <Content Remove="wwwroot\images\marker-icon-2x-blue.png" />
+    <Content Remove="wwwroot\images\marker-icon-2x-green.png" />
+    <Content Remove="wwwroot\images\marker-icon-2x-grey.png" />
+    <Content Remove="wwwroot\images\marker-icon-2x-orange.png" />
+    <Content Remove="wwwroot\images\marker-icon-2x-red.png" />
+    <Content Remove="wwwroot\images\marker-icon-2x-violet.png" />
+    <Content Remove="wwwroot\images\marker-icon-2x-yellow.png" />
+    <Content Remove="wwwroot\images\marker-shadow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\marker-icon-2x-black.png" />
+    <None Include="wwwroot\images\marker-icon-2x-blue.png" />
+    <None Include="wwwroot\images\marker-icon-2x-green.png" />
+    <None Include="wwwroot\images\marker-icon-2x-grey.png" />
+    <None Include="wwwroot\images\marker-icon-2x-orange.png" />
+    <None Include="wwwroot\images\marker-icon-2x-red.png" />
+    <None Include="wwwroot\images\marker-icon-2x-violet.png" />
+    <None Include="wwwroot\images\marker-icon-2x-yellow.png" />
+    <None Include="wwwroot\images\marker-shadow.png" />
   </ItemGroup>
 </Project>

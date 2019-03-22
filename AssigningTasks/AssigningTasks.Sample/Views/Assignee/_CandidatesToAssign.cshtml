@@ -6,6 +6,8 @@
             <th>Id</th>
             <th>Jarak</th>
             <th>Beban</th>
+            <th hidden>Latitude</th>
+            <th hidden>Longitude</th>
         </tr>
     </thead>
     <tbody>
@@ -15,6 +17,8 @@
                 <td>@employee.Id</td>
                 <td>@employee.DistanceToTarget</td>
                 <td>@employee.Load</td>
+                <td hidden>@employee.Location.Latitude</td>
+                <td hidden>@employee.Location.Longitude</td>
             </tr>
         }
     </tbody>
