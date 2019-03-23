@@ -3,8 +3,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(m => m.Id)</th>
+            <th hidden>@Html.DisplayNameFor(m => m.Id)</th>
+            <th>@Html.DisplayNameFor(m => m.TargetId)</th>
             <th>@Html.DisplayNameFor(m => m.TargetName)</th>
+            <th>@Html.DisplayNameFor(m => m.CandidateId)</th>
             <th>@Html.DisplayNameFor(m => m.CandidateName)</th>
             <th>@Html.DisplayNameFor(m => m.Distance)</th>
             <th>@Html.DisplayNameFor(m => m.RequestTime)</th>
@@ -12,8 +14,10 @@
     </thead>
     <tbody>
         <tr>
-            <td>@Model.Id</td>
+            <td hidden>@Model.Id</td>
+            <td>@Model.TargetId</td>
             <td>@Model.TargetName</td>
+            <td>@Model.CandidateId</td>
             <td>@Model.CandidateName</td>
             <td>@Model.Distance</td>
             <td>@Model.RequestTime</td>

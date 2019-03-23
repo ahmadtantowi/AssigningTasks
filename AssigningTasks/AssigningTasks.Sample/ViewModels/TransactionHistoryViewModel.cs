@@ -8,8 +8,14 @@ namespace AssigningTasks.Sample.ViewModels
         [DisplayName("Id Penugasan")]
         public string Id { get; set; }
 
+        [DisplayName("Id Pengguna")]
+        public string TargetId { get; set; }
+
         [DisplayName("Nama Pengguna")]
         public string TargetName { get; set; }
+
+        [DisplayName("Id Karyawan")]
+        public string CandidateId { get; set; }
 
         [DisplayName("Nama Karyawan")]
         public string CandidateName { get; set; }

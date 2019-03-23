@@ -87,7 +87,9 @@ namespace AssigningTasks.Sample.Business
                             TargetName = t.Name,
                             CandidateName = c.Name,
                             Distance = ts.Distance,
-                            RequestTime = ts.RequestAt.ToString("yy-MMM-dd HH:mm")
+                            RequestTime = ts.RequestAt.ToString("yy-MMM-dd HH:mm"),
+                            TargetId = ts.From.TargetId,
+                            CandidateId = ts.To.CandidateId
                         })
                         .ToList();
             }

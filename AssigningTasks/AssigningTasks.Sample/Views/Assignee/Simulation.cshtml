@@ -17,7 +17,36 @@
 <h1>@ViewData["Title"]</h1>
 
 <div id="loader"></div>
-<div id="map" style="height: 300px;"></div>
+<div class="row">
+
+    <div class="col-md-3">
+        <h4><label class="control-label">Pengaturan:</label></h4>
+
+        <label class="form-label" for="algorithmSelected">Algoritma: </label><br/>
+        <select class="select" id="algorithmSelected">
+            <option value="1" selected>Nearest Neighbor</option>
+            <option value="2">Round Robin</option>
+        </select>
+        <br/>
+
+        <div id="maxLoadSelector">
+            <label class="form-label" for="maxLoadSelected">Beban maksimal: </label><br/>
+            <select class="select" id="maxLoadSelected">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+    </div>
+    <div id="map" class="col-md-9" style="height: 400px;"></div>
+</div>
 <hr />
 
 <div class="row" hidden>
@@ -27,75 +56,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <h4><label class="control-label">Pengaturan:</label></h4>
-    </div>
-    <div class="form-group row col-md-3">
-        <label class="col-sm-4 col-form-label" for="algorithmSelected">Algoritma: </label>
-        <select class="custom-select mr-sm-2" id="algorithmSelected">
-            <option value="1" selected>Nearest Neighbor</option>
-            <option value="2">Round Robin</option>
-        </select>
-    </div>
-    <div class="form-group row col-md-3" id="maxLoadSelector">
-        <label class="col-sm-7 col-form-label" for="maxLoadSelected">Beban maksimal: </label>
-        <select class="custom-select mr-sm-2" id="maxLoadSelected">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-        </select>
-    </div>
-</div>
-<hr />
-@*<div class="row">
-    <div class="col-md-6">
-        <label class="control-label">Nearest Neighbor</label>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id Pengguna</th>
-                    <th>Id Karyawan</th>
-                    <th>Jarak (m)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@ViewBag.NnRequest.Id</td>
-                    <td>@ViewBag.NnResult.Id</td>
-                    <td>@ViewBag.NnResult.DistanceToTarget</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-6">
-        <label class="control-label">Round Robin</label>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id Pengguna</th>
-                    <th>Id Karyawan</th>
-                    <th>Jarak (m)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@ViewBag.RrRequest.Id</td>
-                    <td>@ViewBag.RrResult.Id</td>
-                    <td>@ViewBag.RrResult.DistanceToTarget</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<hr />*@
 <div class="row">
     <div class="col-md-6" id="targets">
         <label class="control-label">Pengguna:</label>
@@ -152,7 +112,7 @@
 @section MapSection {
 <script>
     var myMap = L.map('map', {scrollWheelZoom: false})
-        .setView([-6.8986037, 107.6225108], 13);
+        .setView([-6.8986037, 107.6225108], 14);
     var markerGroup = L.layerGroup()
         .addTo(myMap);
 
@@ -214,7 +174,7 @@
         if (data) {
             for (var i in data) {
                 var latlng = L.latLng({ lat: data[i].Latitude , lng: data[i].Longitude });
-                showMarker(latlng, data[i].Id, data[i].Distance, color);
+                showMarker(latlng, data[i].Id, data[i].Jarak, color);
             }
         }
     }
@@ -234,17 +194,13 @@
         markerGroup.clearLayers();
     }
 
-    function jsonSelectedTargetAndCandidate() {
-        
-    }
-
-    function jsonCandidateToAssign() {
+    function getJson(divTable, showLog, showMarker, markerColor = "green") {
         var keys=[], arrayObj=[];
-        $("#candidateToAssign table thead tr th").each(function(){
+        $("#" + divTable + " table thead tr th").each(function() {
             keys.push($(this).html());
         });
 
-        $("#candidateToAssign table tbody tr").each(function(){
+        $("#" + divTable + " table tbody tr").each(function() {
             var obj={}, i=0;
             $(this).children("td").each(function(){
                 obj[keys[i]]=$(this).html();
@@ -253,29 +209,21 @@
             arrayObj.push(obj);
         });
 
-        showMarkers(arrayObj, "green");
-        console.log("CandidateToAssign JSON:");
-        console.log(arrayObj);
+        if (showMarker) {
+            showMarkers(arrayObj, markerColor);
+        }
+        if (showLog) {
+            console.log(divTable + " JSON:");
+            console.log(arrayObj);
+        }
+
+        return arrayObj;
     }
 
-    function jsonTargets() {
-        var keys=[], arrayObj=[];
-        $("#targets table thead tr th").each(function(){
-            keys.push($(this).html());
-        });
-
-        $("#targets table tbody tr").each(function(){
-            var obj={}, i=0;
-            $(this).children("td").each(function(){
-                obj[keys[i]]=$(this).html();
-                i++;
-            })
-            arrayObj.push(obj);
-        });
-
-        showMarkers(arrayObj, "orange");
-        console.log("Targets JSON:");
-        console.log(arrayObj);
+    function addLatLngToJson(json, index, lat, lng) {
+        json[index].Latitude = lat;
+        json[index].Longitude = lng;
+        return json;
     }
 
     function userRequest(id) {
@@ -292,7 +240,10 @@
                 $('#candidateToAssign').html(data);
                 @*document.getElementById('selectedCandidate').style.visibility = 'visible';*@
                 console.log("RequestCandidate - Sukses bos!")
-                jsonCandidateToAssign();
+
+                hideMarkers();
+                var targetRequest = getJson("targets").find(item => item.Id === id)
+                showMarkers([ targetRequest ], "yellow"); @*Target request show marker yellow*@
 
                 $.ajax({
                     type: "GET",
@@ -301,6 +252,13 @@
                         $('#selectedCandidate').html(data);
                         document.getElementById('selectedCandidate').style.visibility = 'visible';
                         console.log("SelectedCandidate - Sukses bos!");
+
+                        var candidateSelected = getJson("selectedCandidate");
+                        var candidateToAssign = getJson("candidateToAssign");
+                        var selected = candidateToAssign.find(item => item.Id === candidateSelected[0].CandidateId);
+                        var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].CandidateId);
+                        showMarkers([ selected ], "red"); @*Candidate selected show marker red*@
+                        showMarkers(toAssign, "green"); @*Candidate to assign show marker green*@
 
                         $.ajax({
                             type: "GET",
@@ -337,8 +295,7 @@
         document.getElementById('selectedCandidate').style.visibility = 'hidden';
         loaded();
 
-        jsonTargets();
-        jsonCandidateToAssign();
+        var json = getJson("targets", true, true, "orange");
     })
 </script>
 }
