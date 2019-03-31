@@ -47,6 +47,19 @@ namespace AssigningTasks.Sample.Controllers
             //ViewBag.RrRequest = targets[1];
             //ViewBag.RrResult = rr.AssignTo(candidates, targets[1], maxLoad: 3);
 
+            //_dataBusiness.ModifyTarget(new Data.Target
+            //{
+            //    Name = "Umar",
+            //    Latitude = -6.898223387931669,
+            //    Longitude = 107.62000895769168,
+            //});
+            //_dataBusiness.ModifyTarget(new Data.Target
+            //{
+            //    Name = "Usop",
+            //    Latitude = -6.907340702276085,
+            //    Longitude = 107.63349205408343,
+            //});
+
             return View(new SimulationViewModel()
             {
                 UserTable = _dataBusiness.GetTargets().ToLibTargets(),

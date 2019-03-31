@@ -44,6 +44,11 @@
                 <option value="10">10</option>
             </select>
         </div>
+
+        <br /><br /><img src="/images/marker-icon-2x-orange.png" style="height:30px;" /> Pengguna yang tersedia
+        <br /><br /><img src="/images/marker-icon-2x-yellow.png" style="height:30px;" /> Pengguna yang meminta jasa
+        <br /><br /><img src="/images/marker-icon-2x-green.png" style="height:30px;" /> Karyawan yang akan ditugaskan
+        <br /><br /><img src="/images/marker-icon-2x-red.png" style="height:30px;" /> Karyawan yang ditugaskan
     </div>
     <div id="map" class="col-md-9" style="height: 400px;"></div>
 </div>
@@ -197,7 +202,7 @@
     function getJson(divTable, showLog, showMarker, markerColor = "green") {
         var keys=[], arrayObj=[];
         $("#" + divTable + " table thead tr th").each(function() {
-            keys.push($(this).html());
+            keys.push($(this).html().replace(" ", ""));
         });
 
         $("#" + divTable + " table tbody tr").each(function() {
@@ -255,8 +260,8 @@
 
                         var candidateSelected = getJson("selectedCandidate");
                         var candidateToAssign = getJson("candidateToAssign");
-                        var selected = candidateToAssign.find(item => item.Id === candidateSelected[0].CandidateId);
-                        var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].CandidateId);
+                        var selected = candidateToAssign.find(item => item.Id === candidateSelected[0].IdKaryawan);
+                        var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].IdKaryawan);
                         showMarkers([ selected ], "red"); @*Candidate selected show marker red*@
                         showMarkers(toAssign, "green"); @*Candidate to assign show marker green*@
 
