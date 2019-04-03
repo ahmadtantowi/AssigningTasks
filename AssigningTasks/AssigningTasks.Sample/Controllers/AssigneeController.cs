@@ -24,41 +24,41 @@ namespace AssigningTasks.Sample.Controllers
 
         public IActionResult Simulation()
         {
-            //var candidates = _dataBusiness
-            //    .GetCandidates()
-            //    .ToLibCandidates();
+            #if DEBUG
+            // var stopWatch = Stopwatch.StartNew();
 
-            //var targets = _dataBusiness
-            //    .GetTargets()
-            //    .ToLibTargets();
+            // //Seed target
+            // for (int i = 0; i < 50; i++)
+            // {
+            //     var location = Helpers.GeneratorHelper.GenerateNearbyLocation(-6.8986037, 107.6225108, 10000);
+            //     var target = new Data.Target
+            //     {
+            //         Name = Helpers.GeneratorHelper.GenerateName(7),
+            //         Latitude = location.Latitude,
+            //         Longitude = location.Longitude
+            //     };
+            //     _dataBusiness.ModifyTarget(target);
+            // }
 
-            //var simulationVM = new SimulationViewModel
-            //{
-            //    EmployeeTable = candidates,
-            //    UserTable = targets,
-            //    Candidates = _dataBusiness.GetCandidates(),
-            //};
+            // //Seed candidate
+            // for (int i = 0; i < 1000; i++)
+            // {
+            //     var load = Helpers.GeneratorHelper.GenerateLoad(0, 20);
+            //     var location = Helpers.GeneratorHelper.GenerateNearbyLocation(-6.8986037, 107.6225108, 10000);
+            //     var candidate = new Data.Candidate
+            //     {
+            //         Name = Helpers.GeneratorHelper.GenerateName(7),
+            //         Latitude = location.Latitude,
+            //         Longitude = location.Longitude,
+            //         Load = load,
+            //         TotalTravel = Helpers.GeneratorHelper.GenerateTotalTravel(load)
+            //     };
+            //     _dataBusiness.ModifyCandidate(candidate);
+            // }
 
-            //IAssignTask nn = new NearestNeighborAlgorithm();
-            //ViewBag.NnRequest = targets[0];
-            //ViewBag.NnResult = nn.AssignTo(candidates, targets[0]);
-
-            //IAssignTask rr = new RoundRobinAlgorithm();
-            //ViewBag.RrRequest = targets[1];
-            //ViewBag.RrResult = rr.AssignTo(candidates, targets[1], maxLoad: 3);
-
-            //_dataBusiness.ModifyTarget(new Data.Target
-            //{
-            //    Name = "Umar",
-            //    Latitude = -6.898223387931669,
-            //    Longitude = 107.62000895769168,
-            //});
-            //_dataBusiness.ModifyTarget(new Data.Target
-            //{
-            //    Name = "Usop",
-            //    Latitude = -6.907340702276085,
-            //    Longitude = 107.63349205408343,
-            //});
+            // stopWatch.Stop();
+            // var elapsedTime = stopWatch.Elapsed;
+            #endif
 
             return View(new SimulationViewModel()
             {
