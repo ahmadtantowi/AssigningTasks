@@ -193,5 +193,44 @@ namespace AssigningTasks.Sample.Business
                 throw exc;
             }
         }
+
+        public  async Task DeleteCandidates(IEnumerable<Data.Candidate> candidates)
+        {
+            try
+            {
+                _dbContext.Candidates.RemoveRange(candidates);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception exc)
+            {
+                throw exc;
+            }
+        }
+
+        public async Task DeleteTargets(IEnumerable<Data.Target> targets)
+        {
+            try
+            {
+                _dbContext.Targets.RemoveRange(targets);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception exc)
+            {
+                throw exc;
+            }
+        }
+
+        public async Task DeleteTransactions(IEnumerable<Data.Transaction> transactions)
+        {
+            try
+            {
+                _dbContext.Transactions.RemoveRange(transactions);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception exc)
+            {
+                throw exc;
+            }
+        }
     }
 }

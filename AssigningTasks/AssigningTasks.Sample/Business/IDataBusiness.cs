@@ -25,5 +25,11 @@ namespace AssigningTasks.Sample.Business
         Task<Data.Candidate> ModifyCandidate(Data.Candidate candidate);
 
         Task<Data.Transaction> ModifyTransaction(Data.Transaction transaction);
+
+        Task DeleteTargets(IEnumerable<Data.Target> targets);
+
+        Task DeleteCandidates(IEnumerable<Data.Candidate> candidates);
+
+        Task DeleteTransactions(IEnumerable<Data.Transaction> transactions);
     }
 }

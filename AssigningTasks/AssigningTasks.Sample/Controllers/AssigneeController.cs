@@ -56,6 +56,9 @@ namespace AssigningTasks.Sample.Controllers
             //     _dataBusiness.ModifyCandidate(candidate);
             // }
 
+            // //Delete candidate in database
+            // _dataBusiness.DeleteCandidates(_dataBusiness.GetCandidates().TakeLast(500));
+
             // stopWatch.Stop();
             // var elapsedTime = stopWatch.Elapsed;
             #endif
