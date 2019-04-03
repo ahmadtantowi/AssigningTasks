@@ -62,8 +62,16 @@ namespace AssigningTasks.Sample.Controllers
 
             return View(new SimulationViewModel()
             {
-                UserTable = _dataBusiness.GetTargets().ToLibTargets(),
-                EmployeeTable = new List<Candidate>(),
+                TargetTable = _dataBusiness.GetTargets()
+                    .Select(x => new TargetViewModel
+                    {
+                        Id = x.TargetId,
+                        Name = x.Name,
+                        Latitude = x.Latitude,
+                        Longitude = x.Longitude
+                    })
+                    .ToList(),
+                CandidateTable = new List<CandidateViewModel>(),
                 TransactionHistory = _dataBusiness.GetTransactionHistories(),
                 SelectedCandidate = new TransactionHistoryViewModel()
             });
@@ -101,12 +109,22 @@ namespace AssigningTasks.Sample.Controllers
 
             _ = ModifyTable(assigned.Item2, currentUser, requestTime, assignedTime);
 
-            return PartialView("_CandidatesToAssign", assigned.Item1);
+            return PartialView("_CandidatesToAssign", assigned.Item1
+                .Select(x => new CandidateViewModel
+                {
+                    Id = x.Id,
+                    Name = _dataBusiness.GetCandidate(x.Id).Name,
+                    DistanceToTarget = x.DistanceToTarget,
+                    Load = x.Load,
+                    Latitude = x.Location.Latitude,
+                    Longitude = x.Location.Longitude
+                })
+                .ToList());
         }
 
         public IActionResult SelectedCandidate()
         {
-            var ata =  PartialView("_SelectedCandidate", _dataBusiness.GetTransactionHistories().FirstOrDefault());return ata;
+            return PartialView("_SelectedCandidate", _dataBusiness.GetTransactionHistories().FirstOrDefault());
         }
 
         public IActionResult TransactionHistory()

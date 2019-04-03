@@ -6,9 +6,12 @@ namespace AssigningTasks.Sample.ViewModels
 {
     public class SimulationViewModel
     {
-        public List<Target> UserTable { get; set; }
+        // public List<Target> UserTable { get; set; }
 
-        public List<Candidate> EmployeeTable { get; set; }
+        // public List<Candidate> EmployeeTable { get; set; }
+
+        public List<TargetViewModel> TargetTable { get; set; }
+        public List<CandidateViewModel> CandidateTable { get; set; }
 
         public List<TransactionHistoryViewModel> TransactionHistory { get; set; }
 
