@@ -22,7 +22,7 @@ namespace AssigningTasks.Sample.Controllers
             _dataBusiness = dataBusiness;
         }
 
-        public IActionResult Simulation()
+        public async Task<IActionResult> Simulation()
         {
             #if DEBUG
             // var stopWatch = Stopwatch.StartNew();
@@ -61,6 +61,8 @@ namespace AssigningTasks.Sample.Controllers
 
             // stopWatch.Stop();
             // var elapsedTime = stopWatch.Elapsed;
+
+            var writed = await _dataBusiness.CreateJsonFile($"Percobaan isi target", _dataBusiness.GetTargets());
             #endif
 
             return View(new SimulationViewModel()
@@ -110,7 +112,7 @@ namespace AssigningTasks.Sample.Controllers
             (IList<Candidate>, Candidate) assigned = assignTask.AssignTo(_dataBusiness.GetCandidates().ToLibCandidates(), currentUser, maxLoad);
             DateTime assignedTime = DateTime.Now;
 
-            _ = ModifyTable(assigned.Item2, currentUser, requestTime, assignedTime);
+            _ = ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime);
 
             return PartialView("_CandidatesToAssign", assigned.Item1
                 .Select(x => new CandidateViewModel
@@ -135,7 +137,7 @@ namespace AssigningTasks.Sample.Controllers
             return PartialView("_TransactionHistory", _dataBusiness.GetTransactionHistories());
         }
 
-        private async Task ModifyTable(Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime)
+        private async Task ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime)
         {
             Data.Candidate modCandidate = _dataBusiness.GetCandidate(candidate.Id);
             modCandidate.TotalTravel += (int)candidate.DistanceToTarget;

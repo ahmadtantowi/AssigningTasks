@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AssigningTasks.Sample.Data;
 using AssigningTasks.Sample.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AssigningTasks.Sample.Business
 {
     public class DataBusiness : IDataBusiness
     {
+        private readonly string _filePath;
         private readonly SampleDataContext _dbContext;
+        private readonly IHostingEnvironment _environment;
 
-        public DataBusiness(SampleDataContext dbContext)
+        public DataBusiness(SampleDataContext dbContext, IHostingEnvironment environment)
         {
             _dbContext = dbContext;
+            _environment = environment;
+            _filePath = Path.Combine(_environment.ContentRootPath, "Files");
         }
 
         public Data.Candidate GetCandidate(string id)
@@ -230,6 +237,58 @@ namespace AssigningTasks.Sample.Business
             catch (Exception exc)
             {
                 throw exc;
+            }
+        }
+
+        public async Task<(bool, string)> CreateJsonFile(string fileName, object rawObject)
+        {
+            string fileNameFull = Path.Combine(_filePath, $"{fileName}.json");
+
+            try
+            {
+                if (!Directory.Exists(_filePath))
+                {
+                    Directory.CreateDirectory(_filePath);
+                }
+                await File.WriteAllTextAsync(fileNameFull, JsonConvert.SerializeObject(rawObject));
+
+                return (true, $"{nameof(CreateJsonFile)}: {fileNameFull} Sukses bos!");
+            }
+            catch (System.Exception exc)
+            {
+                return (false, $"{nameof(CreateJsonFile)}: {fileNameFull} Gagal bos! {exc.Message}");
+            }
+        }
+
+        public async Task<(bool ,string, T)> GetJsonFile<T>(string fileName)
+        {
+            string fileNameFull = Path.Combine(_filePath, $"{fileName}.json");
+
+            try
+            {
+                return (true,
+                    $"{nameof(GetJsonFile)}: {fileNameFull} Sukses bos!",
+                    JsonConvert.DeserializeObject<T>(await File.ReadAllTextAsync(Path.Combine(_filePath, fileName))));
+            }
+            catch (System.Exception exc)
+            {
+                return (false, $"{nameof(GetJsonFile)}: {fileNameFull} Gagal bos! {exc.Message}", default(T));
+            }
+        }
+
+        public (bool, string) DeleteJsonFile(string fileName)
+        {
+            string fileNameFull = Path.Combine(_filePath, $"{fileName}.json");
+
+            try
+            {
+                File.Delete(fileNameFull);
+
+                return (true, $"{nameof(DeleteJsonFile)}: {fileNameFull} Sukses bos!");
+            }
+            catch (System.Exception exc)
+            {
+                return (false, $"{nameof(DeleteJsonFile)}: {fileNameFull} Gagal bos! {exc.Message}");
             }
         }
     }

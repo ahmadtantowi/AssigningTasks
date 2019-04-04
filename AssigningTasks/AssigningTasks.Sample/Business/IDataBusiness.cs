@@ -31,5 +31,11 @@ namespace AssigningTasks.Sample.Business
         Task DeleteCandidates(IEnumerable<Data.Candidate> candidates);
 
         Task DeleteTransactions(IEnumerable<Data.Transaction> transactions);
+
+        Task<(bool, string)> CreateJsonFile(string fileName, object rawObject);
+
+        Task<(bool, string, T)> GetJsonFile<T>(string fileName);
+
+        (bool, string) DeleteJsonFile(string fileName);
     }
 }
