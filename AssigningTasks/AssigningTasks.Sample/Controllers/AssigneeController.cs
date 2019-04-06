@@ -62,7 +62,7 @@ namespace AssigningTasks.Sample.Controllers
             // stopWatch.Stop();
             // var elapsedTime = stopWatch.Elapsed;
 
-            var writed = await _dataBusiness.CreateJsonFile($"Percobaan isi target", _dataBusiness.GetTargets());
+            // var writed = await _dataBusiness.CreateJsonFile($"Percobaan isi target", _dataBusiness.GetTargets());
             #endif
 
             return View(new SimulationViewModel()
@@ -113,6 +113,20 @@ namespace AssigningTasks.Sample.Controllers
             DateTime assignedTime = DateTime.Now;
 
             _ = ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime);
+
+            if (algo == 1)
+            {
+                assigned.Item1 = assigned.Item1
+                    .OrderBy(x => x.DistanceToTarget)
+                    .ToList();
+            }
+            else if (algo == 2) 
+            {
+                assigned.Item1 = assigned.Item1
+                    .OrderBy(x => x.Load)
+                    .ThenBy(x => x.DistanceToTarget)
+                    .ToList();
+            }
 
             return PartialView("_CandidatesToAssign", assigned.Item1
                 .Select(x => new CandidateViewModel

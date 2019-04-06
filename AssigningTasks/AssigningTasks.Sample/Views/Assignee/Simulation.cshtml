@@ -82,6 +82,14 @@
 </div>
 
 <div class="row">
+    <div class="col-md-12">
+        <label class="control-label">Karyawan terpilih:</label>
+        <div id="selectedCandidate">
+            @Html.Partial("_SelectedCandidate", Model.SelectedCandidate)
+        </div>
+    </div>
+</div>
+<div class="row">
     <div class="col-md-6" id="targets">
         <label class="control-label">Pengguna:</label>
         <table class="table">
@@ -118,14 +126,6 @@
     </div>
 </div>
 <hr/>
-<div class="row">
-    <div class="col-md-12">
-        <label class="control-label">Karyawan terpilih:</label>
-        <div id="selectedCandidate">
-            @Html.Partial("_SelectedCandidate", Model.SelectedCandidate)
-        </div>
-    </div>
-</div>
 <div class="row">
     <div class="col-md-12">
         <label class="control-label">Riwayat Penugasan:</label>
@@ -179,16 +179,19 @@
     }
 
     @*orange = users, yellow = user request, green = candidates, red = selectedCandidate*@
-    function showMarker(coordinate, id, distance, color) {
+    function showMarker(coordinate, id, name, distance, color) {
         var marker = L.marker([coordinate.lat, coordinate.lng], {icon: getMarker(color)})
-            .bindPopup(getPopup(coordinate.lat, coordinate.lng, id, distance))
+            .bindPopup(getPopup(coordinate.lat, coordinate.lng, id, name, distance))
             .addTo(markerGroup)
             @*.openPopup();*@
 
-        function getPopup(lat, lng, id, distance) {
+        function getPopup(lat, lng, id, name, distance) {
             var popup = "";
             if (id) {
                 popup = popup + "Id: " + id + "<br/>";
+            }
+            if (name) {
+                popup = popup + "Nama: " + name + "<br/>"
             }
             if (distance) {
                 popup = popup + "Jarak: " + distance + "m <br/>"
@@ -201,7 +204,7 @@
         if (data) {
             for (var i in data) {
                 var latlng = L.latLng({ lat: data[i].Latitude , lng: data[i].Longitude });
-                showMarker(latlng, data[i].Id, data[i].Jarak, color);
+                showMarker(latlng, data[i].Id, data[i].NamaPengguna || data[i].NamaKaryawan , data[i].Jarak, color);
             }
         }
     }
@@ -269,7 +272,7 @@
                 console.log("RequestCandidate - Sukses bos!")
 
                 hideMarkers();
-                var targetRequest = getJson("targets").find(item => item.Id === id)
+                var targetRequest = getJson("targets", true).find(item => item.Id === id)
                 showMarkers([ targetRequest ], "yellow"); @*Target request show marker yellow*@
 
                 $.ajax({
@@ -286,6 +289,7 @@
                         var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].IdKaryawan);
                         showMarkers([ selected ], "red"); @*Candidate selected show marker red*@
                         showMarkers(toAssign, "green"); @*Candidate to assign show marker green*@
+                        myMap.flyTo(new L.LatLng(selected.Latitude, selected.Longitude));
 
                         $.ajax({
                             type: "GET",
