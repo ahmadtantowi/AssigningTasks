@@ -112,7 +112,7 @@ namespace AssigningTasks.Sample.Controllers
             (IList<Candidate>, Candidate) assigned = assignTask.AssignTo(_dataBusiness.GetCandidates().ToLibCandidates(), currentUser, maxLoad);
             DateTime assignedTime = DateTime.Now;
 
-            _ = ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime);
+            ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime);
 
             if (algo == 1)
             {
@@ -151,7 +151,7 @@ namespace AssigningTasks.Sample.Controllers
             return PartialView("_TransactionHistory", _dataBusiness.GetTransactionHistories());
         }
 
-        private async Task ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime)
+        private void ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime)
         {
             Data.Candidate modCandidate = _dataBusiness.GetCandidate(candidate.Id);
             modCandidate.TotalTravel += (int)candidate.DistanceToTarget;
@@ -161,8 +161,11 @@ namespace AssigningTasks.Sample.Controllers
             Data.Target modTarget = _dataBusiness.GetTarget(target.Id);
             modTarget.LastRequest = requestTime;
 
+            string transactionId = Guid.NewGuid().ToString();
+
             Data.Transaction modTransaction = new Data.Transaction
             {
+                TransactionId = transactionId,
                 From = modTarget,
                 To = modCandidate,
                 RequestAt = requestTime,
@@ -170,9 +173,10 @@ namespace AssigningTasks.Sample.Controllers
                 Distance = candidate.DistanceToTarget,
             };
 
-            await _dataBusiness.ModifyCandidate(modCandidate);
-            await _dataBusiness.ModifyTarget(modTarget);
-            await _dataBusiness.ModifyTransaction(modTransaction);
+            _ = _dataBusiness.ModifyCandidate(modCandidate);
+            _ = _dataBusiness.ModifyTarget(modTarget);
+            _ = _dataBusiness.ModifyTransaction(modTransaction);
+            _ = _dataBusiness.CreateJsonFile($"Transaction_{transactionId}", candidatesToAssign);
         }
     }
 }
