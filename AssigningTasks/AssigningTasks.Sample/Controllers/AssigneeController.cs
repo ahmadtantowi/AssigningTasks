@@ -226,15 +226,15 @@ namespace AssigningTasks.Sample.Controllers
 
                 //Add values
                 int row = 2;
-                foreach (var item in _dataBusiness.GetTransactions())
+                foreach (var item in _dataBusiness.GetTransactionHistories())
                 {
                     worksheet.Cells["A" + row].Value = row - 1;  
-                    worksheet.Cells["B" + row].Value = item.TransactionId;  
-                    worksheet.Cells["C" + row].Value = _dataBusiness.GetTarget(item.From.TargetId);  
-                    worksheet.Cells["D" + row].Value = _dataBusiness.GetCandidate(item.To.CandidateId);  
+                    worksheet.Cells["B" + row].Value = item.Id;  
+                    worksheet.Cells["C" + row].Value = item.TargetName;  
+                    worksheet.Cells["D" + row].Value = item.CandidateName;  
                     worksheet.Cells["E" + row].Value = item.Distance;  
                     worksheet.Cells["F" + row].Value = item.Algorithm;  
-                    worksheet.Cells["G" + row].Value = item.AlgorithmExecutionTime.TotalMilliseconds;  
+                    worksheet.Cells["G" + row].Value = item.AlgorithmExecutionTime;  
                     row++;
                 }
 

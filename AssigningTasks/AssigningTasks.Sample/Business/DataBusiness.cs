@@ -96,7 +96,9 @@ namespace AssigningTasks.Sample.Business
                             Distance = ts.Distance,
                             RequestTime = ts.RequestAt.ToString("yy-MMM-dd HH:mm"),
                             TargetId = ts.From.TargetId,
-                            CandidateId = ts.To.CandidateId
+                            CandidateId = ts.To.CandidateId,
+                            Algorithm = ts.Algorithm,
+                            AlgorithmExecutionTime = ts.AlgorithmExecutionTime.TotalMilliseconds
                         })
                         .ToList();
             }

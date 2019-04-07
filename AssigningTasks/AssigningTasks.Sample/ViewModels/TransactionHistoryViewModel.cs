@@ -25,5 +25,11 @@ namespace AssigningTasks.Sample.ViewModels
 
         [DisplayName("Waktu Permintaan")]
         public string RequestTime { get; set; }
+
+        [DisplayName("Algoritma")]
+        public string Algorithm { get; set; }
+
+        [DisplayName("Lama Eksekusi")]
+        public double AlgorithmExecutionTime { get; set; }
     }
 }

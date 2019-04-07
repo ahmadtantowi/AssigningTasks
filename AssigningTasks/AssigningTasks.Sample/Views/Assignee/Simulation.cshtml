@@ -229,7 +229,7 @@
     function getUnassignedCandidateCount() {
         $.ajax({
             type: "GET",
-            url: "@Url.Action("UnassignedCandidatesCount")",
+            url: "@Url.Action("UnassignedCandidateCount")",
             success: function (data) {
                 document.getElementById('unassignedCandidateCount').innerHTML = data;
             },
