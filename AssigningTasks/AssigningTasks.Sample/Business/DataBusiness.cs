@@ -95,6 +95,7 @@ namespace AssigningTasks.Sample.Business
                             CandidateName = c.Name,
                             Distance = ts.Distance,
                             RequestTime = ts.RequestAt.ToString("yy-MMM-dd HH:mm"),
+                            RequestDateTime = ts.RequestAt,
                             TargetId = ts.From.TargetId,
                             CandidateId = ts.To.CandidateId,
                             Algorithm = ts.Algorithm,

@@ -226,7 +226,7 @@ namespace AssigningTasks.Sample.Controllers
 
                 //Add values
                 int row = 2;
-                foreach (var item in _dataBusiness.GetTransactionHistories())
+                foreach (var item in _dataBusiness.GetTransactionHistories().OrderBy(x => x.RequestDateTime))
                 {
                     worksheet.Cells["A" + row].Value = row - 1;  
                     worksheet.Cells["B" + row].Value = item.Id;  

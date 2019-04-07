@@ -31,5 +31,7 @@ namespace AssigningTasks.Sample.ViewModels
 
         [DisplayName("Lama Eksekusi")]
         public double AlgorithmExecutionTime { get; set; }
+
+        public DateTime RequestDateTime { get; set; }
     }
 }
