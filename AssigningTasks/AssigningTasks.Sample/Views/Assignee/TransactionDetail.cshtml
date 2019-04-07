@@ -1,0 +1,59 @@
+@model AssigningTasks.Sample.ViewModels.TransactionDetailViewModel;
+
+@{
+    Layout = "_BaseLayout";
+    ViewData["Title"] = "Detail Riwayat Transaksi";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<!-- <div class="row col-md-12"> -->
+    <label class="control-label">Penugasan:</label><br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.TargetName)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.CandidateName)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.Distance)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.RequestTime)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.Id)</td>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.TargetName)</td>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.CandidateName)</td>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.Distance)</td>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.RequestTime)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <label class="control-label">Daftar Karyawan:</label><br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Candidates[0].Id)</th>
+                <th>@Html.DisplayNameFor(model => model.Candidates[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Candidates[0].Latitude)</th>
+                <th>@Html.DisplayNameFor(model => model.Candidates[0].Longitude)</th>
+                <th>@Html.DisplayNameFor(model => model.Candidates[0].DistanceToTarget)</th>
+                <th>@Html.DisplayNameFor(model => model.Candidates[0].Load)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in Model.Candidates)
+            {
+                <tr>
+                    <td>@transaction.Id</td>
+                    <td>@transaction.Name</td>
+                    <td>@transaction.Latitude</td>
+                    <td>@transaction.Longitude</td>
+                    <td>@transaction.DistanceToTarget</td>
+                    <td>@transaction.Load</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+<!-- </div> -->

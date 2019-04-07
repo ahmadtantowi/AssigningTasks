@@ -18,7 +18,11 @@ namespace AssigningTasks.Sample.Business
 
         List<Data.Transaction> GetTransactions();
 
+        Data.Transaction GetTransaction(string id);
+
         List<TransactionHistoryViewModel> GetTransactionHistories();
+
+        TransactionHistoryViewModel GetTransactionHistory(string id);
 
         Task<Data.Target> ModifyTarget(Data.Target target);
 

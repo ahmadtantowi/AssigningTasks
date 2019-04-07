@@ -171,6 +171,28 @@ namespace AssigningTasks.Sample.Controllers
             return PartialView("_TransactionHistory", _dataBusiness.GetTransactionHistories());
         }
 
+        public IActionResult TransactionDetail(string id)
+        {
+            var targets = _dataBusiness.GetCandidates();
+
+            return View(new TransactionDetailViewModel
+            {
+                TransactionHistory = _dataBusiness.GetTransactionHistory(id),
+                Candidates = Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<Candidate>>(_dataBusiness.GetTransaction(id).Candidates)
+                    .Select(x => new CandidateViewModel
+                    {
+                        Id = x.Id,
+                        DistanceToTarget = x.DistanceToTarget,
+                        Latitude = x.Location.Latitude,
+                        Longitude = x.Location.Longitude,
+                        Load = x.Load,
+                        Name = targets.Where(y => y.CandidateId.Equals(x.Id)).FirstOrDefault()?.Name
+                    })
+                    .OrderBy(x => x.DistanceToTarget)
+                    .ToList()
+            });
+        }
+
         private void ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime, TimeSpan algoExecution, int algo)
         {
             Data.Candidate modCandidate = _dataBusiness.GetCandidate(candidate.Id);

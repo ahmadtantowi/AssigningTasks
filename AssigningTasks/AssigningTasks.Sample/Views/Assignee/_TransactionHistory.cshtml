@@ -14,7 +14,7 @@
         @foreach (var transaction in Model)
         {
             <tr>
-                <td>@transaction.Id</td>
+                <td><a asp-action="TransactionDetail" asp-route-id="@transaction.Id">@transaction.Id</a></td>
                 <td>@transaction.TargetName</td>
                 <td>@transaction.CandidateName</td>
                 <td>@transaction.Distance</td>
