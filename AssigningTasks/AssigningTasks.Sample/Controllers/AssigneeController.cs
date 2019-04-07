@@ -155,6 +155,11 @@ namespace AssigningTasks.Sample.Controllers
                 .ToList());
         }
 
+        public IActionResult UnassignedCandidateCount()
+        {
+            return Json(_dataBusiness.GetCandidates().Where(x => !x.IsAssigned).Count());
+        }
+
         public IActionResult SelectedCandidate()
         {
             return PartialView("_SelectedCandidate", _dataBusiness.GetTransactionHistories().FirstOrDefault());

@@ -65,6 +65,8 @@
             </select>
         </div>
 
+        <label class="form-label">Karyawan yang belum ditugaskan:</label><br />
+        <label id="unassignedCandidateCount" class="form-label">0</label>
         <br /><br /><img src="/images/marker-icon-2x-orange.png" style="height:30px;" /> Pengguna yang tersedia
         <br /><br /><img src="/images/marker-icon-2x-yellow.png" style="height:30px;" /> Pengguna yang meminta jasa
         <br /><br /><img src="/images/marker-icon-2x-green.png" style="height:30px;" /> Karyawan yang akan ditugaskan
@@ -91,7 +93,7 @@
 </div>
 <div class="row">
     <div class="col-md-6" id="targets">
-        <label class="control-label">Pengguna:</label>
+        <label class="control-label">Pengguna (<label id="userCount">0</label>):</label>
         <table class="table">
             <thead>
                 <tr>
@@ -119,7 +121,7 @@
         </table>
     </div>
     <div class="col-md-6">
-        <label class="control-label">Karyawan yang akan ditugaskan:</label>
+        <label class="control-label">Karyawan yang akan ditugaskan (<label id="candidateCount">0</label>):</label>
         <div id="candidateToAssign">
             @Html.Partial("_CandidatesToAssign", Model.CandidateTable)
         </div>
@@ -128,7 +130,7 @@
 <hr/>
 <div class="row">
     <div class="col-md-12">
-        <label class="control-label">Riwayat Penugasan:</label>
+        <label class="control-label">Riwayat Penugasan (<label id="historyCount">0</label>):</label>
         <div id="transactionHistory">
             @Html.Partial("_TransactionHistory", Model.TransactionHistory)
         </div>
@@ -224,6 +226,26 @@
         markerGroup.clearLayers();
     }
 
+    function getUnassignedCandidateCount() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("UnassignedCandidatesCount")",
+            success: function (data) {
+                document.getElementById('unassignedCandidateCount').innerHTML = data;
+            },
+            error: function(exc) {
+                console.log("UnassignedCandidateCount - Error bos!");
+                console.log(exc);
+            }
+        })
+    }
+
+    function updateTableRowCount() {
+        document.getElementById('userCount').innerHTML = $('#targets table tbody td').closest('tr').length;
+        document.getElementById('candidateCount').innerHTML = $('#candidateToAssign table tbody td').closest('tr').length;
+        document.getElementById('historyCount').innerHTML = $('#transactionHistory table tbody td').closest('tr').length;
+    }
+
     function getJson(divTable, showLog, showMarker, markerColor = "green") {
         var keys=[], arrayObj=[];
         $("#" + divTable + " table thead tr th").each(function() {
@@ -290,6 +312,7 @@
                         showMarkers([ selected ], "red"); @*Candidate selected show marker red*@
                         showMarkers(toAssign, "green"); @*Candidate to assign show marker green*@
                         myMap.flyTo(new L.LatLng(selected.Latitude, selected.Longitude));
+                        getUnassignedCandidateCount();
 
                         $.ajax({
                             type: "GET",
@@ -315,6 +338,7 @@
             },
             complete: function() {
                 loaded();
+                updateTableRowCount();
                 console.log("RequestCandidate - Beres bos!")
             }
         });
@@ -326,7 +350,9 @@
         document.getElementById('selectedCandidate').style.visibility = 'hidden';
         loaded();
 
+        getUnassignedCandidateCount();
         var json = getJson("targets", true, true, "orange");
+        updateTableRowCount();
     })
 </script>
 }
