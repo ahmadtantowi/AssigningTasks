@@ -18,6 +18,8 @@ namespace AssigningTasks.Sample.Data
 
         public double Distance { get; set; }
 
+        public int MaxLoad { get; set; }
+
         public bool IsFinished { get; set; }
 
         public DateTime RequestAt { get; set; }

@@ -32,6 +32,9 @@ namespace AssigningTasks.Sample.ViewModels
         [DisplayName("Lama Eksekusi")]
         public double AlgorithmExecutionTime { get; set; }
 
+        [DisplayName("Beban maksimal")]
+        public int MaxLoad { get; set; }
+
         public DateTime RequestDateTime { get; set; }
     }
 }

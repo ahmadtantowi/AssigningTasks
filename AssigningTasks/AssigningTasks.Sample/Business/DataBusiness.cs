@@ -99,7 +99,8 @@ namespace AssigningTasks.Sample.Business
                             TargetId = ts.From.TargetId,
                             CandidateId = ts.To.CandidateId,
                             Algorithm = ts.Algorithm,
-                            AlgorithmExecutionTime = ts.AlgorithmExecutionTime.TotalMilliseconds
+                            AlgorithmExecutionTime = ts.AlgorithmExecutionTime.TotalMilliseconds,
+                            MaxLoad = ts.MaxLoad,
                         })
                         .ToList();
             }
@@ -128,7 +129,8 @@ namespace AssigningTasks.Sample.Business
                             TargetId = ts.From.TargetId,
                             CandidateId = ts.To.CandidateId,
                             Algorithm = ts.Algorithm,
-                            AlgorithmExecutionTime = ts.AlgorithmExecutionTime.TotalMilliseconds
+                            AlgorithmExecutionTime = ts.AlgorithmExecutionTime.TotalMilliseconds,
+                            MaxLoad = ts.MaxLoad,
                         })
                         .FirstOrDefault();
             }

@@ -15,8 +15,11 @@
                 <th>@Html.DisplayNameFor(model => model.TransactionHistory.Id)</th>
                 <th>@Html.DisplayNameFor(model => model.TransactionHistory.TargetName)</th>
                 <th>@Html.DisplayNameFor(model => model.TransactionHistory.CandidateName)</th>
-                <th>@Html.DisplayNameFor(model => model.TransactionHistory.Distance)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.Distance) (m)</th>
                 <th>@Html.DisplayNameFor(model => model.TransactionHistory.RequestTime)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.Algorithm)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.MaxLoad)</th>
+                <th>@Html.DisplayNameFor(model => model.TransactionHistory.AlgorithmExecutionTime) (ms)</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +29,9 @@
                 <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.CandidateName)</td>
                 <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.Distance)</td>
                 <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.RequestTime)</td>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.Algorithm)</td>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.MaxLoad)</td>
+                <td>@Html.DisplayFor(modelItem => modelItem.TransactionHistory.AlgorithmExecutionTime)</td>
             </tr>
         </tbody>
     </table>

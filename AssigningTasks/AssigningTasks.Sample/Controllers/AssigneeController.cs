@@ -127,7 +127,7 @@ namespace AssigningTasks.Sample.Controllers
             stopWatch.Stop();
 
             DateTime assignedTime = DateTime.Now;
-            ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime, stopWatch.Elapsed, algo);
+            ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime, stopWatch.Elapsed, algo, maxLoad);
 
             if (algo == 1)
             {
@@ -193,7 +193,7 @@ namespace AssigningTasks.Sample.Controllers
             });
         }
 
-        private void ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime, TimeSpan algoExecution, int algo)
+        private void ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime, TimeSpan algoExecution, int algo, int maxLoad)
         {
             Data.Candidate modCandidate = _dataBusiness.GetCandidate(candidate.Id);
             modCandidate.TotalTravel += (int)candidate.DistanceToTarget;
@@ -216,6 +216,7 @@ namespace AssigningTasks.Sample.Controllers
                 AlgorithmExecutionTime = algoExecution,
                 Algorithm = algo == 1 ? "Nearest Neighbor" : "Round Robin",
                 Candidates = Newtonsoft.Json.JsonConvert.SerializeObject(candidatesToAssign),
+                MaxLoad = maxLoad,
             };
 
             _ = _dataBusiness.ModifyCandidate(modCandidate);
