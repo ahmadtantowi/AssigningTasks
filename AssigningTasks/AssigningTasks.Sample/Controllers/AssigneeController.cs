@@ -9,6 +9,7 @@ using AssigningTasks.Sample.Business;
 using AssigningTasks.Sample.ViewModels;
 using AssigningTasks.Sample.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using OfficeOpenXml;
 
 namespace AssigningTasks.Sample.Controllers
 {
@@ -199,6 +200,48 @@ namespace AssigningTasks.Sample.Controllers
             _ = _dataBusiness.ModifyTarget(modTarget);
             _ = _dataBusiness.ModifyTransaction(modTransaction);
             // _ = _dataBusiness.CreateJsonFile($"Transaction_{transactionId}", candidatesToAssign);
+        }
+
+        public IActionResult GetExcelFile()
+        {
+            byte[] result = default(byte[]);
+
+            using (var package = new ExcelPackage())
+            {
+                //New worksheet & workbook
+                var worksheet = package.Workbook.Worksheets.Add("Transaksi");
+                using (var cells = worksheet.Cells[1, 1, 1, 7])
+                {
+                    cells.Style.Font.Bold = true;
+                }
+
+                //Add headers
+                worksheet.Cells[1, 1].Value = "No.";
+                worksheet.Cells[1, 2].Value = "Id Transaksi";
+                worksheet.Cells[1, 3].Value = "Pengguna";
+                worksheet.Cells[1, 4].Value = "Karyawan";
+                worksheet.Cells[1, 5].Value = "Jarak (m)";
+                worksheet.Cells[1, 6].Value = "Algoritma";
+                worksheet.Cells[1, 7].Value = "Lama Eksekusi (ms)";
+
+                //Add values
+                int row = 2;
+                foreach (var item in _dataBusiness.GetTransactions())
+                {
+                    worksheet.Cells["A" + row].Value = row - 1;  
+                    worksheet.Cells["B" + row].Value = item.TransactionId;  
+                    worksheet.Cells["C" + row].Value = _dataBusiness.GetTarget(item.From.TargetId);  
+                    worksheet.Cells["D" + row].Value = _dataBusiness.GetCandidate(item.To.CandidateId);  
+                    worksheet.Cells["E" + row].Value = item.Distance;  
+                    worksheet.Cells["F" + row].Value = item.Algorithm;  
+                    worksheet.Cells["G" + row].Value = item.AlgorithmExecutionTime.TotalMilliseconds;  
+                    row++;
+                }
+
+                result = package.GetAsByteArray();
+            }
+
+            return File(result, "application/ms-excel", "AssigningTasks.Sample.xlsx");
         }
     }
 }
