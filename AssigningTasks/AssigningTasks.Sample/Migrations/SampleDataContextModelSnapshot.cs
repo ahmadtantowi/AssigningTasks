@@ -77,6 +77,8 @@ namespace AssigningTasks.Sample.Migrations
 
                     b.Property<bool>("IsFinished");
 
+                    b.Property<int>("MaxLoad");
+
                     b.Property<DateTime>("RequestAt");
 
                     b.Property<string>("ToCandidateId");
