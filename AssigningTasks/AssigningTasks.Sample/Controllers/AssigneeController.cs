@@ -22,7 +22,7 @@ namespace AssigningTasks.Sample.Controllers
             _dataBusiness = dataBusiness;
         }
 
-        public async Task<IActionResult> Simulation()
+        public IActionResult Simulation()
         {
             #if DEBUG
             // var stopWatch = Stopwatch.StartNew();
@@ -63,6 +63,18 @@ namespace AssigningTasks.Sample.Controllers
             // var elapsedTime = stopWatch.Elapsed;
 
             // var writed = await _dataBusiness.CreateJsonFile($"Percobaan isi target", _dataBusiness.GetTargets());
+
+            // //Clean database
+            // _ = _dataBusiness.DeleteTargets(_dataBusiness.GetTargets().Take(2));
+            // _ = _dataBusiness.DeleteCandidates(_dataBusiness.GetCandidates().Take(7));
+            // var modif = _dataBusiness.GetCandidates().Where(x => x.IsAssigned);
+            // foreach (var item in modif)
+            // {
+            //     item.IsAssigned = false;
+            //     _ = _dataBusiness.ModifyCandidate(item);
+            // }
+            // _ = _dataBusiness.DeleteTransactions(_dataBusiness.GetTransactions());
+
             #endif
 
             return View(new SimulationViewModel()
@@ -109,10 +121,12 @@ namespace AssigningTasks.Sample.Controllers
                 assignTask = new RoundRobinAlgorithm();
             }
 
+            var stopWatch = Stopwatch.StartNew();
             (IList<Candidate>, Candidate) assigned = assignTask.AssignTo(_dataBusiness.GetCandidates().ToLibCandidates(), currentUser, maxLoad);
-            DateTime assignedTime = DateTime.Now;
+            stopWatch.Stop();
 
-            ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime);
+            DateTime assignedTime = DateTime.Now;
+            ModifyTable(assigned.Item1, assigned.Item2, currentUser, requestTime, assignedTime, stopWatch.Elapsed, algo);
 
             if (algo == 1)
             {
@@ -151,7 +165,7 @@ namespace AssigningTasks.Sample.Controllers
             return PartialView("_TransactionHistory", _dataBusiness.GetTransactionHistories());
         }
 
-        private void ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime)
+        private void ModifyTable(ICollection<Candidate> candidatesToAssign, Candidate candidate, Target target, DateTime requestTime, DateTime assignedTime, TimeSpan algoExecution, int algo)
         {
             Data.Candidate modCandidate = _dataBusiness.GetCandidate(candidate.Id);
             modCandidate.TotalTravel += (int)candidate.DistanceToTarget;
@@ -171,12 +185,15 @@ namespace AssigningTasks.Sample.Controllers
                 RequestAt = requestTime,
                 AssigneeAt = assignedTime,
                 Distance = candidate.DistanceToTarget,
+                AlgorithmExecutionTime = algoExecution,
+                Algorithm = algo == 1 ? "Nearest Neighbor" : "Round Robin",
+                Candidates = Newtonsoft.Json.JsonConvert.SerializeObject(candidatesToAssign),
             };
 
             _ = _dataBusiness.ModifyCandidate(modCandidate);
             _ = _dataBusiness.ModifyTarget(modTarget);
             _ = _dataBusiness.ModifyTransaction(modTransaction);
-            _ = _dataBusiness.CreateJsonFile($"Transaction_{transactionId}", candidatesToAssign);
+            // _ = _dataBusiness.CreateJsonFile($"Transaction_{transactionId}", candidatesToAssign);
         }
     }
 }
