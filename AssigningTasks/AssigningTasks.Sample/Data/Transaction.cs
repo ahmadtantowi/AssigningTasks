@@ -14,6 +14,8 @@ namespace AssigningTasks.Sample.Data
 
         public virtual Candidate To { get; set; }
 
+        public string Candidates { get; set; }
+
         public double Distance { get; set; }
 
         public bool IsFinished { get; set; }
@@ -23,5 +25,9 @@ namespace AssigningTasks.Sample.Data
         public DateTime AssigneeAt { get; set; }
 
         public DateTime FinishAt { get; set; }
+
+        public TimeSpan AlgorithmExecutionTime { get; set; }
+
+        public string Algorithm { get; set; }
     }
 }

@@ -3,14 +3,16 @@ using System;
 using AssigningTasks.Sample.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AssigningTasks.Sample.Migrations
 {
     [DbContext(typeof(SampleDataContext))]
-    partial class SampleDataContextModelSnapshot : ModelSnapshot
+    [Migration("20190407023251_AddColumnForDetailTransaction")]
+    partial class AddColumnForDetailTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
