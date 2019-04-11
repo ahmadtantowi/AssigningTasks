@@ -266,5 +266,84 @@ namespace AssigningTasks.Sample.Controllers
 
             return File(result, "application/ms-excel", "AssigningTasks.Sample.xlsx");
         }
+
+        public IActionResult GetTransactionDetailExcelFile(int algo, int maxLoad)
+        {
+            byte[] result = default(byte[]);
+            var transactions = _dataBusiness.GetTransactionHistories();
+            var candidates = _dataBusiness.GetCandidates();
+            string algoName = string.Empty;
+
+            if (algo == 1)
+            {
+                transactions = transactions
+                    .Where(x => x.Algorithm.Equals("Nearest Neighbor"))
+                    .OrderBy(x => x.RequestDateTime)
+                    .ToList();
+            }
+            else if (algo == 2)
+            {
+                transactions = transactions
+                    .Where(x => x.Algorithm.Equals("Round Robin") && x.MaxLoad == maxLoad)
+                    .OrderBy(x => x.RequestDateTime)
+                    .ToList();
+            }
+
+            using (var package = new ExcelPackage())
+            {
+                //New worksheet & workbook
+                var worksheet = package.Workbook.Worksheets.Add(algo == 1 ? "Nearest Neighbor" : $"Round Robin (beban={maxLoad})");
+                int row = 1;
+
+                foreach (var item in transactions)
+                {
+                    //Detail
+                    worksheet.Cells[$"A{row}:G{row}"].Merge = true;
+                    worksheet.Cells[$"A{row}"].Style.WrapText = true;
+                    worksheet.Cells[$"A{row}"].Value = $"IdPenugasan: {item.Id}, Pengguna: {item.TargetName}, Karyawan: {item.CandidateName}, " +
+                        $"Jarak: {item.Distance}M, Waktu: {item.RequestTime}, Algoritma: {item.Algorithm}, Beban: {item.MaxLoad}, Lama: {item.AlgorithmExecutionTime}ms";
+                    worksheet.Row(row).Height = 30;
+                    // worksheet.Column(1).Width = 4.17;
+                    // worksheet.Column(2).Width = 33.33;
+                    // worksheet.Column(3).Width = 7.5;
+                    // worksheet.Column(4).Width = 8;
+                    // worksheet.Column(5).Width = 8;
+                    // worksheet.Column(6).Width = 5.83;
+                    // worksheet.Column(7).Width = 5;
+                    row += 2;
+                    
+                    //Add headers
+                    worksheet.Cells[row, 1].Value = "No.";
+                    worksheet.Cells[row, 2].Value = "Id";
+                    worksheet.Cells[row, 3].Value = "Karyawan";
+                    worksheet.Cells[row, 4].Value = "Latitude";
+                    worksheet.Cells[row, 5].Value = "Longitue";
+                    worksheet.Cells[row, 6].Value = "Jarak";
+                    worksheet.Cells[row, 7].Value = "Beban";
+
+                    var details = Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<Candidate>>(_dataBusiness.GetTransaction(item.Id).Candidates);
+                    var currRow = 1;
+                    row++;
+
+                    //Add values
+                    foreach (var detail in details)
+                    {
+                        worksheet.Cells["A" + row].Value = currRow;  
+                        worksheet.Cells["B" + row].Value = detail.Id;  
+                        worksheet.Cells["C" + row].Value = candidates.Where(x => x.CandidateId.Equals(detail.Id)).FirstOrDefault().Name;
+                        worksheet.Cells["D" + row].Value = detail.Location.Latitude;  
+                        worksheet.Cells["E" + row].Value = detail.Location.Longitude;  
+                        worksheet.Cells["F" + row].Value = detail.DistanceToTarget;  
+                        worksheet.Cells["G" + row].Value = detail.Load; 
+                        currRow++; 
+                        row++;
+                    }
+                    row += 2;
+                }
+                result = package.GetAsByteArray();
+            }
+
+            return File(result, "application/ms-excel", "AssigningTasks.Sample.TransactionDetails.xlsx");
+        }
     }
 }
