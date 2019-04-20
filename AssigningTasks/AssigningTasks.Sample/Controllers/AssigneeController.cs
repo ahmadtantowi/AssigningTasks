@@ -267,78 +267,76 @@ namespace AssigningTasks.Sample.Controllers
             return File(result, "application/ms-excel", "AssigningTasks.Sample.xlsx");
         }
 
-        public IActionResult GetTransactionDetailExcelFile(int algo, int maxLoad)
+        public IActionResult GetTransactionDetailExcelFile(int take = 5)
         {
             byte[] result = default(byte[]);
-            var transactions = _dataBusiness.GetTransactionHistories();
             var candidates = _dataBusiness.GetCandidates();
-            string algoName = string.Empty;
-
-            if (algo == 1)
-            {
-                transactions = transactions
-                    .Where(x => x.Algorithm.Equals("Nearest Neighbor"))
-                    .OrderBy(x => x.RequestDateTime)
-                    .ToList();
-            }
-            else if (algo == 2)
-            {
-                transactions = transactions
-                    .Where(x => x.Algorithm.Equals("Round Robin") && x.MaxLoad == maxLoad)
-                    .OrderBy(x => x.RequestDateTime)
-                    .ToList();
-            }
+            List<TransactionHistoryViewModel> transactions = default(List<TransactionHistoryViewModel>);
+            int maxLoad = 0;
 
             using (var package = new ExcelPackage())
             {
-                //New worksheet & workbook
-                var worksheet = package.Workbook.Worksheets.Add(algo == 1 ? "Nearest Neighbor" : $"Round Robin (beban={maxLoad})");
-                int row = 1;
 
-                foreach (var item in transactions)
+                for (int i = 0; i < 5; i++)
                 {
-                    //Detail
-                    worksheet.Cells[$"A{row}:G{row}"].Merge = true;
-                    worksheet.Cells[$"A{row}"].Style.WrapText = true;
-                    worksheet.Cells[$"A{row}"].Value = $"IdPenugasan: {item.Id}, Pengguna: {item.TargetName}, Karyawan: {item.CandidateName}, " +
-                        $"Jarak: {item.Distance}M, Waktu: {item.RequestTime}, Algoritma: {item.Algorithm}, Beban: {item.MaxLoad}, Lama: {item.AlgorithmExecutionTime}ms";
-                    worksheet.Row(row).Height = 30;
-                    // worksheet.Column(1).Width = 4.17;
-                    // worksheet.Column(2).Width = 33.33;
-                    // worksheet.Column(3).Width = 7.5;
-                    // worksheet.Column(4).Width = 8;
-                    // worksheet.Column(5).Width = 8;
-                    // worksheet.Column(6).Width = 5.83;
-                    // worksheet.Column(7).Width = 5;
-                    row += 2;
-                    
-                    //Add headers
-                    worksheet.Cells[row, 1].Value = "No.";
-                    worksheet.Cells[row, 2].Value = "Id";
-                    worksheet.Cells[row, 3].Value = "Karyawan";
-                    worksheet.Cells[row, 4].Value = "Latitude";
-                    worksheet.Cells[row, 5].Value = "Longitue";
-                    worksheet.Cells[row, 6].Value = "Jarak";
-                    worksheet.Cells[row, 7].Value = "Beban";
+                    //New worksheet & workbook
+                    maxLoad = i == 0 ? 0 : maxLoad + 5;
+                    var worksheet = package.Workbook.Worksheets.Add(i == 0 ? "Nearest Neighbor" : $"Round Robin (beban={maxLoad})");
+                    int row = 1;
 
-                    var details = Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<Candidate>>(_dataBusiness.GetTransaction(item.Id).Candidates);
-                    var currRow = 1;
-                    row++;
-
-                    //Add values
-                    foreach (var detail in details)
+                    if (i == 0)
                     {
-                        worksheet.Cells["A" + row].Value = currRow;  
-                        worksheet.Cells["B" + row].Value = detail.Id;  
-                        worksheet.Cells["C" + row].Value = candidates.Where(x => x.CandidateId.Equals(detail.Id)).FirstOrDefault().Name;
-                        worksheet.Cells["D" + row].Value = detail.Location.Latitude;  
-                        worksheet.Cells["E" + row].Value = detail.Location.Longitude;  
-                        worksheet.Cells["F" + row].Value = detail.DistanceToTarget;  
-                        worksheet.Cells["G" + row].Value = detail.Load; 
-                        currRow++; 
+                        transactions = _dataBusiness.GetTransactionHistories()
+                            .Where(x => x.Algorithm.Equals("Nearest Neighbor"))
+                            .ToList();
+                    }
+                    else
+                    {
+                        transactions = _dataBusiness.GetTransactionHistories()
+                            .Where(x => x.Algorithm.Equals("Round Robin") && x.MaxLoad == maxLoad)
+                            .ToList();
+                    }
+
+                    foreach (var item in transactions.OrderBy(x => x.RequestDateTime))
+                    {
+                        //Detail
+                        worksheet.Cells.Style.Font.Size = 7;
+                        worksheet.Cells[$"A{row}:G{row}"].Merge = true;
+                        worksheet.Cells[$"A{row}"].Style.WrapText = true;
+                        worksheet.Cells[$"A{row}"].Value = $"IdPenugasan: {item.Id}, Pengguna: {item.TargetName}, Karyawan: {item.CandidateName}, " +
+                            $"Jarak: {item.Distance}m, Waktu: {item.RequestTime}, Algoritma: {item.Algorithm}, Beban Maks.: {item.MaxLoad}, Lama: {item.AlgorithmExecutionTime}ms";
+                        worksheet.Row(row).Height = 20;
+                        row ++;
+                        
+                        //Add headers
+                        worksheet.Cells[row, 1].Value = "No.";
+                        worksheet.Cells[row, 2].Value = "Id";
+                        worksheet.Cells[row, 3].Value = "Karyawan";
+                        worksheet.Cells[row, 4].Value = "Latitude";
+                        worksheet.Cells[row, 5].Value = "Longitue";
+                        worksheet.Cells[row, 6].Value = "Jarak";
+                        worksheet.Cells[row, 7].Value = "Beban";
+
+                        var details = Newtonsoft.Json.JsonConvert.DeserializeObject<ICollection<Candidate>>(_dataBusiness.GetTransaction(item.Id).Candidates);
+                        var currRow = 1;
+                        row++;
+
+                        //Add values
+                        foreach (var detail in details.OrderBy(x => x.DistanceToTarget).Take(take))
+                        {
+                            worksheet.Cells["A" + row].Value = currRow;  
+                            worksheet.Cells["B" + row].Value = detail.Id;  
+                            worksheet.Cells["C" + row].Value = candidates.Where(x => x.CandidateId.Equals(detail.Id)).FirstOrDefault().Name;
+                            worksheet.Cells["D" + row].Value = detail.Location.Latitude;  
+                            worksheet.Cells["E" + row].Value = detail.Location.Longitude;  
+                            worksheet.Cells["F" + row].Value = detail.DistanceToTarget;  
+                            worksheet.Cells["G" + row].Value = detail.Load; 
+                            currRow++; 
+                            row++;
+                        }
+                        worksheet.Cells[$"A{row}:G{row}"].Merge = true;
                         row++;
                     }
-                    row += 2;
                 }
                 result = package.GetAsByteArray();
             }
