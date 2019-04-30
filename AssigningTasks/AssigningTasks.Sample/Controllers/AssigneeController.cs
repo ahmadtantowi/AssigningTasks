@@ -143,6 +143,7 @@ namespace AssigningTasks.Sample.Controllers
                     .ToList();
             }
 
+            ViewBag.LoadVisibility = algo == 2 ? "visible" : "hidden";
             return PartialView("_CandidatesToAssign", assigned.Item1
                 .Select(x => new CandidateViewModel
                 {
@@ -151,7 +152,8 @@ namespace AssigningTasks.Sample.Controllers
                     DistanceToTarget = x.DistanceToTarget,
                     Load = x.Load,
                     Latitude = x.Location.Latitude,
-                    Longitude = x.Location.Longitude
+                    Longitude = x.Location.Longitude, 
+                    IsAssigned = x.IsAssigned ? "Ya" : "Tidak"
                 })
                 .ToList());
         }

@@ -19,5 +19,8 @@ namespace AssigningTasks.Sample.ViewModels
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
+
+        [DisplayName("Bertugas")]
+        public string IsAssigned { get; set; }
     }
 }
