@@ -65,12 +65,14 @@
             </select>
         </div>
 
-        <label class="form-label">Karyawan yang belum ditugaskan:</label><br />
-        <label id="unassignedCandidateCount" class="form-label">0</label>
-        <br /><br /><img src="/images/marker-icon-2x-orange.png" style="height:30px;" /> Pengguna yang tersedia
-        <br /><br /><img src="/images/marker-icon-2x-yellow.png" style="height:30px;" /> Pengguna yang meminta jasa
-        <br /><br /><img src="/images/marker-icon-2x-green.png" style="height:30px;" /> Karyawan yang akan ditugaskan
-        <br /><br /><img src="/images/marker-icon-2x-red.png" style="height:30px;" /> Karyawan yang ditugaskan
+        <label class="form-label">
+            Minimarket yang karyawannya belum ditugaskan: 
+            <label id="unassignedCandidateCount" class="form-label">0</label>
+        </label>
+        <br /><br /><img src="/images/marker-icon-2x-orange.png" style="height:30px;" /> Pelanggan yang tersedia
+        <br /><br /><img src="/images/marker-icon-2x-yellow.png" style="height:30px;" /> Pelanggan yang memesan
+        <br /><br /><img src="/images/marker-icon-2x-green.png" style="height:30px;" /> Minimarket yang dapat dipesan
+        <br /><br /><img src="/images/marker-icon-2x-red.png" style="height:30px;" /> Minimarket yang terpilih
     </div>
     <div id="map" class="col-md-9" style="height: 400px;"></div>
 </div>
@@ -85,7 +87,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <label class="control-label">Karyawan terpilih:</label>
+        <label class="control-label">Minimarket terpilih yang karyawannya akan ditugaskan:</label>
         <div id="selectedCandidate">
             @Html.Partial("_SelectedCandidate", Model.SelectedCandidate)
         </div>
@@ -93,7 +95,7 @@
 </div>
 <div class="row">
     <div class="col-md-6" id="targets">
-        <label class="control-label">Pengguna (<label id="userCount">0</label>):</label>
+        <label class="control-label">Pelanggan (<label id="userCount">0</label>):</label>
         <table class="table">
             <thead>
                 <tr>
@@ -113,7 +115,7 @@
                         <td>@user.Latitude</td>
                         <td>@user.Longitude</td>
                         <td>
-                            <a onclick="userRequest('@user.Id')">Minta jasa</a>
+                            <a onclick="userRequest('@user.Id')">Pesan Gas LPG</a>
                         </td>
                     </tr>
                 }
@@ -121,7 +123,7 @@
         </table>
     </div>
     <div class="col-md-6">
-        <label class="control-label">Karyawan yang akan ditugaskan (<label id="candidateCount">0</label>):</label>
+        <label class="control-label">Minimarket yang dapat dipesan (<label id="candidateCount">0</label>):</label>
         <div id="candidateToAssign">
             @Html.Partial("_CandidatesToAssign", Model.CandidateTable)
         </div>

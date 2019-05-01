@@ -7,7 +7,7 @@ namespace AssigningTasks.Sample.ViewModels
     {
         public string Id { get; set; }
 
-        [DisplayName("Nama Pengguna")]
+        [DisplayName("Nama Pelanggan")]
         public string Name { get; set; }
         
         public double Latitude { get; set; }

@@ -7,7 +7,7 @@ namespace AssigningTasks.Sample.ViewModels
     {
         public string Id { get; set; }
 
-        [DisplayName("Nama Karyawan")]
+        [DisplayName("Minimarket")]
         public string Name { get; set; }
 
         [DisplayName("Beban")]
@@ -20,7 +20,7 @@ namespace AssigningTasks.Sample.ViewModels
 
         public double Longitude { get; set; }
 
-        [DisplayName("Bertugas")]
+        [DisplayName("Sedang Mengantar")]
         public string IsAssigned { get; set; }
     }
 }
