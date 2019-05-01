@@ -81,8 +81,10 @@ namespace AssigningTasks.Sample.Controllers
             // //New candidates data
             // var candidates = _dataBusiness.GetCandidates();
             // var transactions = _dataBusiness.GetTransactions();
+            // var targets = _dataBusiness.GetTargets().TakeLast(20);
             // await _dataBusiness.DeleteCandidates(candidates);
             // await _dataBusiness.DeleteTransactions(transactions);
+            // await _dataBusiness.DeleteTargets(targets);
 
             // candidates = await Helpers.GeneratorHelper.GetCandidatesFromMinimarket(_hereMaps);
             // candidates.ForEach(c => _dataBusiness.ModifyCandidate(c));
