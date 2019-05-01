@@ -309,8 +309,8 @@
 
                         var candidateSelected = getJson("selectedCandidate");
                         var candidateToAssign = getJson("candidateToAssign");
-                        var selected = candidateToAssign.find(item => item.Id === candidateSelected[0].IdKaryawan);
-                        var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].IdKaryawan);
+                        var selected = candidateToAssign.find(item => item.Id === candidateSelected[0].IdMinimarket);
+                        var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].IdMinimarket);
                         showMarkers([ selected ], "red"); @*Candidate selected show marker red*@
                         showMarkers(toAssign, "green"); @*Candidate to assign show marker green*@
                         myMap.flyTo(new L.LatLng(selected.Latitude, selected.Longitude));
