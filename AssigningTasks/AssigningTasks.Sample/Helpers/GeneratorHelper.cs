@@ -1,6 +1,9 @@
-﻿using System;
+﻿using AssigningTasks.Sample.Business;
+using AssigningTasks.Sample.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AssigningTasks.Sample.Helpers
 {
@@ -64,6 +67,21 @@ namespace AssigningTasks.Sample.Helpers
         {
             _rnd = _rnd ?? new Random();
             return load == 0 ? 0 : _rnd.Next(load * 250, load * 500);
+        }
+
+        public static async Task<List<Data.Candidate>> GetCandidatesFromMinimarket(IHereMaps hereMaps)
+        {
+            _rnd = _rnd ?? new Random();
+            List<Data.Candidate> candidates = new List<Data.Candidate>();
+
+            var s = await hereMaps.DiscoverSearch("indomaret", -6.8986037, 107.6225108);
+            s.results.items.ForEach(c => candidates.Add(c.ToCandidate()));
+            s = await hereMaps.DiscoverSearch("alfamart", -6.8986037, 107.6225108);
+            s.results.items.ForEach(c => candidates.Add(c.ToCandidate()));
+            s = await hereMaps.DiscoverSearch("yomart", -6.8986037, 107.6225108);
+            s.results.items.ForEach(c => candidates.Add(c.ToCandidate()));
+
+            return candidates;
         }
 
         public static IEnumerable<Data.Candidate> GetCandidatesFromEga()

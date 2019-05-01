@@ -17,10 +17,12 @@ namespace AssigningTasks.Sample.Controllers
     public class AssigneeController : Controller
     {
         private readonly IDataBusiness _dataBusiness;
+        private readonly IHereMaps _hereMaps;
 
-        public AssigneeController(IDataBusiness dataBusiness)
+        public AssigneeController(IDataBusiness dataBusiness, IHereMaps hereMaps)
         {
             _dataBusiness = dataBusiness;
+            _hereMaps = hereMaps;
         }
 
         public IActionResult Simulation()
@@ -76,6 +78,14 @@ namespace AssigningTasks.Sample.Controllers
             // }
             // _ = _dataBusiness.DeleteTransactions(_dataBusiness.GetTransactions());
 
+            // //New candidates data
+            // var candidates = _dataBusiness.GetCandidates();
+            // var transactions = _dataBusiness.GetTransactions();
+            // await _dataBusiness.DeleteCandidates(candidates);
+            // await _dataBusiness.DeleteTransactions(transactions);
+
+            // candidates = await Helpers.GeneratorHelper.GetCandidatesFromMinimarket(_hereMaps);
+            // candidates.ForEach(c => _dataBusiness.ModifyCandidate(c));
             #endif
 
             return View(new SimulationViewModel()
