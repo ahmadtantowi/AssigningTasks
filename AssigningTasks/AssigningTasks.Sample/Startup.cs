@@ -52,6 +52,7 @@ namespace AssigningTasks.Sample
             });
 
             services.AddTransient<IDataBusiness, DataBusiness>();
+            services.AddTransient<IHereMaps, HereMaps>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
