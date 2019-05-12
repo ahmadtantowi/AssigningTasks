@@ -14,10 +14,10 @@ namespace AssigningTasks.Sample.ViewModels
         [DisplayName("Nama Pengguna")]
         public string TargetName { get; set; }
 
-        [DisplayName("Id Minimarket")]
+        [DisplayName("Id Area")]
         public string CandidateId { get; set; }
 
-        [DisplayName("Minimarket")]
+        [DisplayName("Areae Teknisi")]
         public string CandidateName { get; set; }
 
         [DisplayName("Jarak Tempuh")]

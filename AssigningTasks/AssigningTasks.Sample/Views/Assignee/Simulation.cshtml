@@ -66,13 +66,13 @@
         </div>
 
         <label class="form-label">
-            Minimarket yang karyawannya belum ditugaskan: 
+            Area service yang teknisinya belum ditugaskan: 
             <label id="unassignedCandidateCount" class="form-label">0</label>
         </label>
         <br /><br /><img src="/images/marker-icon-2x-orange.png" style="height:30px;" /> Pelanggan yang tersedia
         <br /><br /><img src="/images/marker-icon-2x-yellow.png" style="height:30px;" /> Pelanggan yang memesan
-        <br /><br /><img src="/images/marker-icon-2x-green.png" style="height:30px;" /> Minimarket yang dapat dipesan
-        <br /><br /><img src="/images/marker-icon-2x-red.png" style="height:30px;" /> Minimarket yang terpilih
+        <br /><br /><img src="/images/marker-icon-2x-green.png" style="height:30px;" /> Area teknisi yang tersedia
+        <br /><br /><img src="/images/marker-icon-2x-red.png" style="height:30px;" /> Area teknisi yang terpilih
     </div>
     <div id="map" class="col-md-9" style="height: 400px;"></div>
 </div>
@@ -87,7 +87,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <label class="control-label">Minimarket terpilih yang karyawannya akan ditugaskan:</label>
+        <label class="control-label">Area yang teknisinya akan ditugaskan:</label>
         <div id="selectedCandidate">
             @Html.Partial("_SelectedCandidate", Model.SelectedCandidate)
         </div>
@@ -115,7 +115,7 @@
                         <td>@user.Latitude</td>
                         <td>@user.Longitude</td>
                         <td>
-                            <a onclick="userRequest('@user.Id')">Pesan Gas LPG</a>
+                            <a onclick="userRequest('@user.Id')">Minta jasa</a>
                         </td>
                     </tr>
                 }
@@ -123,7 +123,7 @@
         </table>
     </div>
     <div class="col-md-6">
-        <label class="control-label">Minimarket yang dapat dipesan (<label id="candidateCount">0</label>):</label>
+        <label class="control-label">Area yang teknisinya dapat ditugaskan (<label id="candidateCount">0</label>):</label>
         <div id="candidateToAssign">
             @Html.Partial("_CandidatesToAssign", Model.CandidateTable)
         </div>
@@ -309,8 +309,8 @@
 
                         var candidateSelected = getJson("selectedCandidate");
                         var candidateToAssign = getJson("candidateToAssign");
-                        var selected = candidateToAssign.find(item => item.Id === candidateSelected[0].IdMinimarket);
-                        var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].IdMinimarket);
+                        var selected = candidateToAssign.find(item => item.Id === candidateSelected[0].IdArea);
+                        var toAssign = candidateToAssign.filter(item => item.Id != candidateSelected[0].IdArea);
                         showMarkers([ selected ], "red"); @*Candidate selected show marker red*@
                         showMarkers(toAssign, "green"); @*Candidate to assign show marker green*@
                         myMap.flyTo(new L.LatLng(selected.Latitude, selected.Longitude));
